@@ -7,11 +7,11 @@ import { createClient } from "@/lib/supabase/client";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
-  const supabase = createClient();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(formData: FormData) {
+    const supabase = createClient();
     setLoading(true);
     setError("");
     const email = String(formData.get("email") ?? "");
