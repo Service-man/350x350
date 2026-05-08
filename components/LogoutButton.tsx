@@ -2,13 +2,17 @@
 
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { DEMO_SESSION_COOKIE, isDemoSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
 
 export function LogoutButton() {
   const router = useRouter();
 
   async function logout() {
-    await createClient().auth.signOut();
+    document.cookie = `${DEMO_SESSION_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+    if (!isDemoSupabaseConfig()) {
+      await createClient().auth.signOut();
+    }
     router.push("/");
     router.refresh();
   }

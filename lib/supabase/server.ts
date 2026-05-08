@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerClient } from "@supabase/ssr";
 import type { CookieOptions } from "@supabase/ssr";
+import { DEMO_SESSION_COOKIE, isDemoSupabaseConfig } from "@/lib/supabase/config";
 
 type CookieToSet = {
   name: string;
@@ -35,6 +36,14 @@ export async function createClient() {
 }
 
 export async function getUser() {
+  const cookieStore = await cookies();
+  if (isDemoSupabaseConfig() && cookieStore.get(DEMO_SESSION_COOKIE)?.value === "1") {
+    return {
+      id: "00000000-0000-4000-8000-000000000350",
+      email: "demo@350xgarage.in"
+    };
+  }
+
   const supabase = await createClient();
   const {
     data: { user }

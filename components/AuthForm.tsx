@@ -3,7 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { DEMO_SESSION_COOKIE } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
+
+function isDemoMode() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return !url || !key || url.includes("example.supabase.co") || key === "dummy";
+}
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
@@ -11,13 +18,24 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(formData: FormData) {
-    const supabase = createClient();
     setLoading(true);
     setError("");
     const email = String(formData.get("email") ?? "");
     const password = String(formData.get("password") ?? "");
     const fullName = String(formData.get("full_name") ?? "");
 
+    if (isDemoMode()) {
+      document.cookie = `${DEMO_SESSION_COOKIE}=1; path=/; max-age=86400; SameSite=Lax`;
+      window.localStorage.setItem(
+        "garage_demo_profile",
+        JSON.stringify({ email, fullName: fullName || "Demo Rider" })
+      );
+      router.push("/dashboard");
+      router.refresh();
+      return;
+    }
+
+    const supabase = createClient();
     const result =
       mode === "login"
         ? await supabase.auth.signInWithPassword({ email, password })
@@ -61,6 +79,11 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         <input className="field mt-1" name="password" type="password" minLength={6} required />
       </label>
       {error ? <p className="rounded bg-red-50 p-3 text-sm text-danger">{error}</p> : null}
+      {isDemoMode() ? (
+        <p className="rounded bg-amber-50 p-3 text-sm text-amber-800">
+          Demo mode is active until real Supabase environment variables are added in Vercel.
+        </p>
+      ) : null}
       <button className="btn-primary w-full" disabled={loading} type="submit">
         {loading ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
       </button>
