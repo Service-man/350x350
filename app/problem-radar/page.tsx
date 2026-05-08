@@ -3,6 +3,8 @@ import { EmptyState } from "@/components/EmptyState";
 import { IssueClusterCard } from "@/components/IssueClusterCard";
 import { COMPONENT_OPTIONS } from "@/lib/constants/components";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
+import { demoIssueClusters } from "@/lib/demo/data";
 import type { IssueCluster } from "@/lib/types";
 
 export default async function ProblemRadarPage({
@@ -12,9 +14,15 @@ export default async function ProblemRadarPage({
 }) {
   await requireUser();
   const params = await searchParams;
-  const supabase = await createClient();
-  const { data = [] } = await supabase.from("issue_clusters").select("*").order("mention_count", { ascending: false });
-  const issues = (data as IssueCluster[]).filter((issue) => {
+  let data: IssueCluster[] = demoIssueClusters;
+
+  if (!isDemoSupabaseConfig()) {
+    const supabase = await createClient();
+    const { data: rows = [] } = await supabase.from("issue_clusters").select("*").order("mention_count", { ascending: false });
+    data = rows as IssueCluster[];
+  }
+
+  const issues = data.filter((issue) => {
     const search = params.q?.toLowerCase();
     if (params.model && issue.bike_model !== params.model) return false;
     if (params.component && issue.component !== params.component) return false;
@@ -24,7 +32,7 @@ export default async function ProblemRadarPage({
     }
     return true;
   });
-  const models = Array.from(new Set((data as IssueCluster[]).map((issue) => issue.bike_model))).sort();
+  const models = Array.from(new Set(data.map((issue) => issue.bike_model))).sort();
 
   return (
     <AppShell title="Problem Radar" subtitle="Model-wise issue intelligence from seed data today, designed for future compliant community/API ingestion.">

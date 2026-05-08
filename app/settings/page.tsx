@@ -2,11 +2,18 @@ import { ShieldCheck, Trash2, UserCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LogoutButton } from "@/components/LogoutButton";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
+import { demoProfile } from "@/lib/demo/data";
 
 export default async function SettingsPage() {
   const user = await requireUser();
-  const supabase = await createClient();
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  let profile = demoProfile;
+
+  if (!isDemoSupabaseConfig()) {
+    const supabase = await createClient();
+    const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+    profile = data ?? demoProfile;
+  }
 
   return (
     <AppShell title="Settings" subtitle="Profile, privacy notes, and account actions for the MVP.">

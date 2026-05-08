@@ -6,6 +6,7 @@ import { Save } from "lucide-react";
 import { FREQUENCIES, SEVERITIES } from "@/lib/constants/bikes";
 import { COMPONENT_OPTIONS } from "@/lib/constants/components";
 import { createClient } from "@/lib/supabase/client";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
 import type { Bike, ServiceLog } from "@/lib/types";
 import { titleCase } from "@/lib/utils";
 
@@ -26,6 +27,12 @@ export function SymptomForm({
   async function onSubmit(formData: FormData) {
     setLoading(true);
     setError("");
+    if (isDemoSupabaseConfig()) {
+      setError("Demo mode is read-only. Add real Supabase environment variables to save symptom logs.");
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       user_id: userId,
       bike_id: String(formData.get("bike_id") ?? ""),

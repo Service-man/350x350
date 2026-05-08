@@ -2,7 +2,9 @@ import { AppShell } from "@/components/AppShell";
 import { EmptyState } from "@/components/EmptyState";
 import { RiskScoreCard } from "@/components/RiskScoreCard";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
 import { calculateRiskScores } from "@/lib/risk/riskScoring";
+import { demoBikes, demoServiceLogs, demoSymptoms } from "@/lib/demo/data";
 import type { Bike, ServiceLog, SymptomLog } from "@/lib/types";
 
 export default async function HealthPage({
@@ -12,16 +14,24 @@ export default async function HealthPage({
 }) {
   const user = await requireUser();
   const params = await searchParams;
-  const supabase = await createClient();
-  const [{ data: bikes = [] }, { data: services = [] }, { data: symptoms = [] }] = await Promise.all([
-    supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-    supabase.from("service_logs").select("*").eq("user_id", user.id),
-    supabase.from("symptom_logs").select("*").eq("user_id", user.id)
-  ]);
-  const typedBikes = bikes as Bike[];
+  let typedBikes: Bike[] = demoBikes;
+  let services: ServiceLog[] = demoServiceLogs;
+  let symptoms: SymptomLog[] = demoSymptoms;
+
+  if (!isDemoSupabaseConfig()) {
+    const supabase = await createClient();
+    const [{ data: bikes = [] }, { data: serviceRows = [] }, { data: symptomRows = [] }] = await Promise.all([
+      supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("service_logs").select("*").eq("user_id", user.id),
+      supabase.from("symptom_logs").select("*").eq("user_id", user.id)
+    ]);
+    typedBikes = bikes as Bike[];
+    services = serviceRows as ServiceLog[];
+    symptoms = symptomRows as SymptomLog[];
+  }
   const selectedBike = typedBikes.find((bike) => bike.id === params.bike) ?? typedBikes[0];
   const scores = selectedBike
-    ? calculateRiskScores(selectedBike, symptoms as SymptomLog[], services as ServiceLog[])
+    ? calculateRiskScores(selectedBike, symptoms, services)
     : [];
 
   return (

@@ -3,17 +3,24 @@ import { BikeCard } from "@/components/BikeCard";
 import { BikeForm } from "@/components/BikeForm";
 import { EmptyState } from "@/components/EmptyState";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
+import { demoBikes, demoServiceLogs } from "@/lib/demo/data";
 import type { Bike, ServiceLog } from "@/lib/types";
 
 export default async function GaragePage() {
   const user = await requireUser();
-  const supabase = await createClient();
-  const [{ data: bikes = [] }, { data: services = [] }] = await Promise.all([
-    supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-    supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false })
-  ]);
-  const typedBikes = bikes as Bike[];
-  const typedServices = services as ServiceLog[];
+  let typedBikes: Bike[] = demoBikes;
+  let typedServices: ServiceLog[] = demoServiceLogs;
+
+  if (!isDemoSupabaseConfig()) {
+    const supabase = await createClient();
+    const [{ data: bikes = [] }, { data: services = [] }] = await Promise.all([
+      supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false })
+    ]);
+    typedBikes = bikes as Bike[];
+    typedServices = services as ServiceLog[];
+  }
 
   return (
     <AppShell title="Bike Garage" subtitle="Add and maintain basic details for every motorcycle you track.">

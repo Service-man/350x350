@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Save } from "lucide-react";
 import { USAGE_TYPES } from "@/lib/constants/bikes";
 import { createClient } from "@/lib/supabase/client";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
 import type { Bike } from "@/lib/types";
 import { titleCase } from "@/lib/utils";
 
@@ -17,6 +18,12 @@ export function BikeForm({ userId, bike }: { userId: string; bike?: Bike }) {
   async function onSubmit(formData: FormData) {
     setLoading(true);
     setError("");
+    if (isDemoSupabaseConfig()) {
+      setError("Demo mode is read-only. Add real Supabase environment variables to save bikes.");
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       user_id: userId,
       brand: String(formData.get("brand") ?? "").trim(),

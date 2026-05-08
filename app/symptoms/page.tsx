@@ -4,6 +4,8 @@ import { SymptomForm } from "@/components/SymptomForm";
 import { COMPONENT_OPTIONS } from "@/lib/constants/components";
 import { SEVERITIES } from "@/lib/constants/bikes";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
+import { demoBikes, demoServiceLogs, demoSymptoms } from "@/lib/demo/data";
 import type { Bike, ServiceLog, SymptomLog } from "@/lib/types";
 import { formatKm, titleCase } from "@/lib/utils";
 
@@ -14,14 +16,23 @@ export default async function SymptomsPage({
 }) {
   const user = await requireUser();
   const params = await searchParams;
-  const supabase = await createClient();
-  const [{ data: bikes = [] }, { data: serviceLogs = [] }, { data: symptoms = [] }] = await Promise.all([
-    supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-    supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false }),
-    supabase.from("symptom_logs").select("*").eq("user_id", user.id).order("symptom_date", { ascending: false })
-  ]);
-  const typedBikes = bikes as Bike[];
-  const typedSymptoms = (symptoms as SymptomLog[]).filter((symptom) => {
+  let typedBikes: Bike[] = demoBikes;
+  let serviceLogs: ServiceLog[] = demoServiceLogs;
+  let symptoms: SymptomLog[] = demoSymptoms;
+
+  if (!isDemoSupabaseConfig()) {
+    const supabase = await createClient();
+    const [{ data: bikes = [] }, { data: serviceRows = [] }, { data: symptomRows = [] }] = await Promise.all([
+      supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false }),
+      supabase.from("symptom_logs").select("*").eq("user_id", user.id).order("symptom_date", { ascending: false })
+    ]);
+    typedBikes = bikes as Bike[];
+    serviceLogs = serviceRows as ServiceLog[];
+    symptoms = symptomRows as SymptomLog[];
+  }
+
+  const typedSymptoms = symptoms.filter((symptom) => {
     if (params.bike && symptom.bike_id !== params.bike) return false;
     if (params.component && symptom.component !== params.component) return false;
     if (params.severity && symptom.severity !== params.severity) return false;
@@ -33,7 +44,7 @@ export default async function SymptomsPage({
   return (
     <AppShell title="Symptom Logger" subtitle="Capture rider-observed symptoms with component, severity, frequency, and resolution state.">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <SymptomForm userId={user.id} bikes={typedBikes} serviceLogs={serviceLogs as ServiceLog[]} />
+        <SymptomForm userId={user.id} bikes={typedBikes} serviceLogs={serviceLogs} />
         <section className="space-y-4">
           <form className="panel grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <label>

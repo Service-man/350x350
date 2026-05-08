@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FileUp, Save } from "lucide-react";
 import { GARAGE_TYPES, SERVICE_TYPES } from "@/lib/constants/bikes";
 import { createClient } from "@/lib/supabase/client";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
 import type { Bike } from "@/lib/types";
 import { titleCase } from "@/lib/utils";
 
@@ -25,6 +26,12 @@ export function ServiceLogForm({ userId, bikes }: { userId: string; bikes: Bike[
   async function onSubmit(formData: FormData) {
     setLoading(true);
     setError("");
+    if (isDemoSupabaseConfig()) {
+      setError("Demo mode is read-only. Add real Supabase environment variables to save service logs and bills.");
+      setLoading(false);
+      return;
+    }
+
     const bikeId = String(formData.get("bike_id") ?? "");
     const file = formData.get("bill_file");
 

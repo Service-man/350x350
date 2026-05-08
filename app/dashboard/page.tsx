@@ -4,31 +4,40 @@ import { EmptyState } from "@/components/EmptyState";
 import { RiskScoreCard } from "@/components/RiskScoreCard";
 import { StatCard } from "@/components/StatCard";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
 import { calculateRiskScores } from "@/lib/risk/riskScoring";
+import { demoBikes, demoIssueClusters, demoServiceLogs, demoSymptoms } from "@/lib/demo/data";
 import type { Bike, IssueCluster, ServiceLog, SymptomLog } from "@/lib/types";
 import { formatInr } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const user = await requireUser();
-  const supabase = await createClient();
-  const [{ data: bikes = [] }, { data: serviceLogs = [] }, { data: symptoms = [] }, { data: issues = [] }] =
-    await Promise.all([
-      supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-      supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false }),
-      supabase.from("symptom_logs").select("*").eq("user_id", user.id).order("symptom_date", { ascending: false }),
-      supabase.from("issue_clusters").select("*").limit(5)
-    ]);
+  let typedBikes: Bike[] = demoBikes;
+  let typedServices: ServiceLog[] = demoServiceLogs;
+  let typedSymptoms: SymptomLog[] = demoSymptoms;
+  let issues: IssueCluster[] = demoIssueClusters;
 
-  const typedBikes = bikes as Bike[];
-  const typedServices = serviceLogs as ServiceLog[];
-  const typedSymptoms = symptoms as SymptomLog[];
+  if (!isDemoSupabaseConfig()) {
+    const supabase = await createClient();
+    const [{ data: bikes = [] }, { data: serviceLogs = [] }, { data: symptoms = [] }, { data: issueRows = [] }] =
+      await Promise.all([
+        supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false }),
+        supabase.from("symptom_logs").select("*").eq("user_id", user.id).order("symptom_date", { ascending: false }),
+        supabase.from("issue_clusters").select("*").limit(5)
+      ]);
+    typedBikes = bikes as Bike[];
+    typedServices = serviceLogs as ServiceLog[];
+    typedSymptoms = symptoms as SymptomLog[];
+    issues = issueRows as IssueCluster[];
+  }
   const selectedBike = typedBikes[0];
   const openSymptoms = typedSymptoms.filter((symptom) => !symptom.resolved);
   const totalCost = typedServices.reduce((sum, log) => sum + Number(log.total_cost ?? 0), 0);
   const risks = selectedBike ? calculateRiskScores(selectedBike, typedSymptoms, typedServices).slice(0, 3) : [];
   const modelIssues = selectedBike
-    ? (issues as IssueCluster[]).filter((issue) => issue.bike_model === selectedBike.model).slice(0, 3)
-    : (issues as IssueCluster[]).slice(0, 3);
+    ? issues.filter((issue) => issue.bike_model === selectedBike.model).slice(0, 3)
+    : issues.slice(0, 3);
 
   return (
     <AppShell title="Dashboard" subtitle="A live snapshot from your garage, service logs, symptoms, and seed model intelligence.">

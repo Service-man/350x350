@@ -4,6 +4,8 @@ import { AppShell } from "@/components/AppShell";
 import { EmptyState } from "@/components/EmptyState";
 import { ServiceLogForm } from "@/components/ServiceLogForm";
 import { requireUser, createClient } from "@/lib/supabase/server";
+import { isDemoSupabaseConfig } from "@/lib/supabase/config";
+import { demoBikes, demoServiceLogs } from "@/lib/demo/data";
 import type { Bike, ServiceLog } from "@/lib/types";
 import { formatInr, formatKm, titleCase } from "@/lib/utils";
 
@@ -14,18 +16,26 @@ export default async function ServiceLogsPage({
 }) {
   const user = await requireUser();
   const params = await searchParams;
-  const supabase = await createClient();
-  const [{ data: bikes = [] }, { data: logs = [] }] = await Promise.all([
-    supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-    supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false })
-  ]);
-  const typedBikes = bikes as Bike[];
-  const filteredLogs = (logs as ServiceLog[]).filter((log) => !params.bike || log.bike_id === params.bike);
+  let typedBikes: Bike[] = demoBikes;
+  let logs: ServiceLog[] = demoServiceLogs;
+  const supabase = isDemoSupabaseConfig() ? null : await createClient();
+
+  if (supabase) {
+    const [{ data: bikes = [] }, { data: serviceLogs = [] }] = await Promise.all([
+      supabase.from("bikes").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("service_logs").select("*").eq("user_id", user.id).order("service_date", { ascending: false })
+    ]);
+    typedBikes = bikes as Bike[];
+    logs = serviceLogs as ServiceLog[];
+  }
+
+  const filteredLogs = logs.filter((log) => !params.bike || log.bike_id === params.bike);
   const signedBillUrls = new Map<string, string>();
 
   await Promise.all(
     filteredLogs.map(async (log) => {
       if (!log.bill_file_url) return;
+      if (!supabase) return;
       const { data: signed } = await supabase.storage
         .from("service-bills")
         .createSignedUrl(log.bill_file_url, 60 * 10);
