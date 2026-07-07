@@ -37,11 +37,17 @@ export async function createClient() {
 
 export async function getUser() {
   const cookieStore = await cookies();
-  if (isDemoSupabaseConfig() && cookieStore.get(DEMO_SESSION_COOKIE)?.value === "1") {
-    return {
-      id: "00000000-0000-4000-8000-000000000350",
-      email: "demo@350xgarage.in"
-    };
+  if (isDemoSupabaseConfig()) {
+    // No real Supabase to ask: the demo cookie is the whole session. Without
+    // it, treat the visitor as logged out (requireUser then redirects) instead
+    // of crashing on a client built from missing env vars.
+    if (cookieStore.get(DEMO_SESSION_COOKIE)?.value === "1") {
+      return {
+        id: "00000000-0000-4000-8000-000000000350",
+        email: "demo@350xgarage.in"
+      };
+    }
+    return null;
   }
 
   const supabase = await createClient();

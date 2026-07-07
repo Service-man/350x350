@@ -1,68 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useRef } from "react";
 import { Save } from "lucide-react";
+import { saveBikeAction } from "@/app/actions/bikes";
 import { USAGE_TYPES } from "@/lib/constants/bikes";
-import { createClient } from "@/lib/supabase/client";
-import { isDemoSupabaseConfig } from "@/lib/supabase/config";
-import type { Bike } from "@/lib/types";
+import type { ActionState, Bike } from "@/lib/types";
 import { titleCase } from "@/lib/utils";
 
-export function BikeForm({ userId, bike }: { userId: string; bike?: Bike }) {
-  const router = useRouter();
-  const supabase = createClient();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const initialState: ActionState = { ok: false };
 
-  async function onSubmit(formData: FormData) {
-    setLoading(true);
-    setError("");
-    if (isDemoSupabaseConfig()) {
-      setError("Demo mode is read-only. Add real Supabase environment variables to save bikes.");
-      setLoading(false);
-      return;
-    }
+export function BikeForm({ bike }: { bike?: Bike }) {
+  const [state, formAction, pending] = useActionState(saveBikeAction, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
 
-    const payload = {
-      user_id: userId,
-      brand: String(formData.get("brand") ?? "").trim(),
-      model: String(formData.get("model") ?? "").trim(),
-      variant: String(formData.get("variant") ?? "").trim() || null,
-      manufacturing_year: Number(formData.get("manufacturing_year")) || null,
-      purchase_year: Number(formData.get("purchase_year")) || null,
-      odometer_km: Number(formData.get("odometer_km")) || 0,
-      city: String(formData.get("city") ?? "").trim() || null,
-      usage_type: String(formData.get("usage_type") ?? "mixed"),
-      has_modifications: formData.get("has_modifications") === "on",
-      modification_notes: String(formData.get("modification_notes") ?? "").trim() || null,
-      fuel_type: String(formData.get("fuel_type") ?? "petrol").trim() || "petrol"
-    };
-
-    if (!payload.brand || !payload.model) {
-      setError("Brand and model are required.");
-      setLoading(false);
-      return;
-    }
-
-    const query = bike
-      ? supabase.from("bikes").update(payload).eq("id", bike.id)
-      : supabase.from("bikes").insert(payload);
-    const { error: saveError } = await query;
-
-    if (saveError) {
-      setError(saveError.message);
-      setLoading(false);
-      return;
-    }
-
-    router.refresh();
-    setLoading(false);
-  }
+  // Clear the add-bike form after a successful save; keep edit values in place.
+  useEffect(() => {
+    if (state.ok && !bike) formRef.current?.reset();
+  }, [state, bike]);
 
   return (
-    <form action={onSubmit} className="panel space-y-4">
+    <form ref={formRef} action={formAction} className="panel space-y-4">
       <h2 className="text-lg font-semibold text-ink">{bike ? "Edit bike" : "Add bike"}</h2>
+      {bike ? <input type="hidden" name="bike_id" value={bike.id} /> : null}
       <div className="grid gap-4 md:grid-cols-2">
         <label>
           <span className="label">Brand</span>
@@ -115,10 +74,11 @@ export function BikeForm({ userId, bike }: { userId: string; bike?: Bike }) {
         <span className="label">Modification notes</span>
         <textarea className="field mt-1" name="modification_notes" rows={3} defaultValue={bike?.modification_notes ?? ""} />
       </label>
-      {error ? <p className="rounded bg-red-50 p-3 text-sm text-danger">{error}</p> : null}
-      <button className="btn-primary" type="submit" disabled={loading}>
+      {state.error && !pending ? <p className="rounded bg-red-50 p-3 text-sm text-danger">{state.error}</p> : null}
+      {state.ok && !pending ? <p className="rounded bg-mint p-3 text-sm font-medium text-leaf">Saved.</p> : null}
+      <button className="btn-primary" type="submit" disabled={pending}>
         <Save className="h-4 w-4" aria-hidden="true" />
-        {loading ? "Saving..." : "Save bike"}
+        {pending ? "Saving..." : "Save bike"}
       </button>
     </form>
   );

@@ -1,5 +1,6 @@
-import { ShieldCheck, Trash2, UserCircle } from "lucide-react";
+import { ShieldCheck, UserCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { DeleteDataButton } from "@/components/DeleteDataButton";
 import { LogoutButton } from "@/components/LogoutButton";
 import { requireUser, createClient } from "@/lib/supabase/server";
 import { isDemoSupabaseConfig } from "@/lib/supabase/config";
@@ -43,12 +44,13 @@ export default async function SettingsPage() {
           <ShieldCheck className="h-7 w-7 text-leaf" aria-hidden="true" />
           <h2 className="mt-4 text-lg font-semibold text-ink">Privacy note</h2>
           <p className="mt-3 text-sm leading-6 text-steel">
-            This MVP stores bike, service, symptom, and bill metadata you submit. It does not scrape social media, perform OCR, or run predictive maintenance models.
+            Tracking is opt-in: this app stores only the bike, service, symptom, and bill data you choose to
+            submit, protected by row-level security. The public knowledge base is sourced from curated research
+            and compliant APIs — no social media scraping, no OCR, no predictive-maintenance models.
           </p>
-          <button className="btn-secondary mt-5" disabled type="button">
-            <Trash2 className="h-4 w-4" aria-hidden="true" />
-            Delete my data placeholder
-          </button>
+          <div className="mt-5">
+            <DeleteDataButton />
+          </div>
         </section>
       </div>
     </AppShell>

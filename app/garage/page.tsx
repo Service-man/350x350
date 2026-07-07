@@ -25,7 +25,7 @@ export default async function GaragePage() {
   return (
     <AppShell title="Bike Garage" subtitle="Add and maintain basic details for every motorcycle you track.">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <BikeForm userId={user.id} />
+        <BikeForm />
         <section>
           <h2 className="mb-4 text-lg font-semibold text-ink">Your bikes</h2>
           {typedBikes.length === 0 ? (
@@ -38,7 +38,7 @@ export default async function GaragePage() {
                   <details className="rounded border border-stone-200 bg-white p-4">
                     <summary className="cursor-pointer text-sm font-semibold text-leaf">Edit details</summary>
                     <div className="mt-4">
-                      <BikeForm userId={user.id} bike={bike} />
+                      <BikeForm bike={bike} />
                     </div>
                   </details>
                 </div>
