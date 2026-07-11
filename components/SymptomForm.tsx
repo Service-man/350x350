@@ -1,72 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useRef } from "react";
 import { Save } from "lucide-react";
+import { saveSymptomAction } from "@/app/actions/symptoms";
 import { FREQUENCIES, SEVERITIES } from "@/lib/constants/bikes";
 import { COMPONENT_OPTIONS } from "@/lib/constants/components";
-import { createClient } from "@/lib/supabase/client";
-import { isDemoSupabaseConfig } from "@/lib/supabase/config";
-import type { Bike, ServiceLog } from "@/lib/types";
+import type { ActionState, Bike, ServiceLog } from "@/lib/types";
 import { titleCase } from "@/lib/utils";
 
-export function SymptomForm({
-  userId,
-  bikes,
-  serviceLogs
-}: {
-  userId: string;
-  bikes: Bike[];
-  serviceLogs: ServiceLog[];
-}) {
-  const router = useRouter();
-  const supabase = createClient();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const initialState: ActionState = { ok: false };
 
-  async function onSubmit(formData: FormData) {
-    setLoading(true);
-    setError("");
-    if (isDemoSupabaseConfig()) {
-      setError("Demo mode is read-only. Add real Supabase environment variables to save symptom logs.");
-      setLoading(false);
-      return;
-    }
+export function SymptomForm({ bikes, serviceLogs }: { bikes: Bike[]; serviceLogs: ServiceLog[] }) {
+  const [state, formAction, pending] = useActionState(saveSymptomAction, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
 
-    const payload = {
-      user_id: userId,
-      bike_id: String(formData.get("bike_id") ?? ""),
-      symptom_date: String(formData.get("symptom_date") ?? ""),
-      odometer_km: Number(formData.get("odometer_km")) || null,
-      component: String(formData.get("component") ?? ""),
-      symptom_title: String(formData.get("symptom_title") ?? "").trim(),
-      symptom_description: String(formData.get("symptom_description") ?? "").trim() || null,
-      severity: String(formData.get("severity") ?? "low"),
-      frequency: String(formData.get("frequency") ?? "once"),
-      resolved: formData.get("resolved") === "on",
-      linked_service_log_id: String(formData.get("linked_service_log_id") ?? "") || null
-    };
-
-    if (!payload.bike_id || !payload.symptom_date || !payload.component || !payload.symptom_title) {
-      setError("Bike, date, component, and title are required.");
-      setLoading(false);
-      return;
-    }
-
-    const { error: saveError } = await supabase.from("symptom_logs").insert(payload);
-    if (saveError) {
-      setError(saveError.message);
-      setLoading(false);
-      return;
-    }
-
-    router.refresh();
-    (document.getElementById("symptom-form") as HTMLFormElement | null)?.reset();
-    setLoading(false);
-  }
+  useEffect(() => {
+    if (state.ok) formRef.current?.reset();
+  }, [state]);
 
   return (
-    <form id="symptom-form" action={onSubmit} className="panel space-y-4">
+    <form ref={formRef} id="symptom-form" action={formAction} className="panel space-y-4">
       <h2 className="text-lg font-semibold text-ink">Create symptom log</h2>
       <div className="grid gap-4 md:grid-cols-2">
         <label>
@@ -142,10 +95,11 @@ export function SymptomForm({
         <input name="resolved" type="checkbox" />
         Mark as resolved
       </label>
-      {error ? <p className="rounded bg-red-50 p-3 text-sm text-danger">{error}</p> : null}
-      <button className="btn-primary" disabled={loading || bikes.length === 0} type="submit">
+      {state.error && !pending ? <p className="rounded bg-red-50 p-3 text-sm text-danger">{state.error}</p> : null}
+      {state.ok && !pending ? <p className="rounded bg-mint p-3 text-sm font-medium text-leaf">Symptom saved.</p> : null}
+      <button className="btn-primary" disabled={pending || bikes.length === 0} type="submit">
         <Save className="h-4 w-4" aria-hidden="true" />
-        {loading ? "Saving..." : "Save symptom"}
+        {pending ? "Saving..." : "Save symptom"}
       </button>
     </form>
   );

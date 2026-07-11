@@ -58,19 +58,41 @@ export type SymptomLog = {
   updated_at: string;
 };
 
-export type IssueCluster = {
+export type ConfidenceLevel = "low" | "medium" | "high";
+export type KnownIssueSourceType = "seed" | "youtube" | "reddit" | "rss" | "oem" | "community";
+
+// The inform-first knowledge base row (supersedes the legacy issue_clusters table).
+export type KnownIssue = {
   id: string;
-  bike_brand: string;
-  bike_model: string;
+  brand: string;
+  model: string;
+  variant: string | null;
+  mfg_year_start: number | null;
+  mfg_year_end: number | null;
   component: string;
   issue_title: string;
   issue_summary: string | null;
   severity: Severity;
   mileage_band: string | null;
+  service_checkpoint_km: number | null;
+  rpm_band: string | null;
+  symptoms_to_watch: string | null;
+  preventive_action: string | null;
+  typical_cost_min: number | null;
+  typical_cost_max: number | null;
   mention_count: number;
   trend_percentage: number;
-  confidence_level: string;
-  source_type: string;
+  confidence_level: ConfidenceLevel;
+  source_type: KnownIssueSourceType;
+  source_url: string | null;
+  last_verified_at: string | null;
   created_at: string;
   updated_at: string;
+};
+
+// Shared result shape for server actions consumed via useActionState.
+export type ActionState = {
+  ok: boolean;
+  error?: string;
+  ts?: number;
 };

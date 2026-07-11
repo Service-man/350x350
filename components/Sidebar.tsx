@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
-  Activity,
   Bike,
+  BookOpen,
   Database,
   Gauge,
   Home,
@@ -11,16 +11,34 @@ import {
   Wrench
 } from "lucide-react";
 
-const links = [
+// The logged-in "my garage" area. Public knowledge pages (library, models,
+// data sources) live under the Explore divider and never require login.
+const garageLinks = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/garage", label: "Garage", icon: Bike },
   { href: "/service-logs", label: "Service Logs", icon: Wrench },
   { href: "/symptoms", label: "Symptoms", icon: Stethoscope },
-  { href: "/problem-radar", label: "Problem Radar", icon: Activity },
   { href: "/health", label: "Health", icon: Gauge },
-  { href: "/data-sources", label: "Data Sources", icon: Database },
   { href: "/settings", label: "Settings", icon: Settings }
 ];
+
+const exploreLinks = [
+  { href: "/library", label: "Bike Library", icon: BookOpen },
+  { href: "/models", label: "Models", icon: Gauge },
+  { href: "/data-sources", label: "Data Sources", icon: Database }
+];
+
+function NavLink({ href, label, icon: Icon }: (typeof garageLinks)[number]) {
+  return (
+    <Link
+      href={href}
+      className="flex shrink-0 items-center gap-3 rounded px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+    >
+      <Icon className="h-4 w-4" aria-hidden="true" />
+      {label}
+    </Link>
+  );
+}
 
 export function Sidebar() {
   return (
@@ -31,19 +49,15 @@ export function Sidebar() {
           <span className="text-lg font-semibold">350x Garage</span>
         </Link>
         <nav className="flex gap-1 overflow-x-auto px-3 py-3 lg:flex-1 lg:flex-col lg:overflow-visible">
-          {links.map((link) => {
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="flex shrink-0 items-center gap-3 rounded px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
-              >
-                <Icon className="h-4 w-4" aria-hidden="true" />
-                {link.label}
-              </Link>
-            );
-          })}
+          {garageLinks.map((link) => (
+            <NavLink key={link.href} {...link} />
+          ))}
+          <span className="hidden px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wide text-white/40 lg:block">
+            Explore
+          </span>
+          {exploreLinks.map((link) => (
+            <NavLink key={link.href} {...link} />
+          ))}
         </nav>
       </div>
     </aside>

@@ -1,4 +1,4 @@
-import type { Bike, IssueCluster, ServiceLog, SymptomLog } from "@/lib/types";
+import type { Bike, ServiceLog, SymptomLog } from "@/lib/types";
 
 const demoUserId = "00000000-0000-4000-8000-000000000350";
 const now = new Date().toISOString();
@@ -115,57 +115,6 @@ export const demoSymptoms: SymptomLog[] = [
     frequency: "frequent",
     resolved: false,
     linked_service_log_id: null,
-    created_at: now,
-    updated_at: now
-  }
-];
-
-export const demoIssueClusters: IssueCluster[] = [
-  {
-    id: "70000000-0000-4000-8000-000000000350",
-    bike_brand: "Royal Enfield",
-    bike_model: "Classic 350",
-    component: "Battery",
-    issue_title: "Battery drain after accessory fitment",
-    issue_summary: "Riders report weak starts or battery drain after auxiliary lights, horns, or phone chargers without clean relay wiring.",
-    severity: "medium",
-    mileage_band: "3,000-12,000 km",
-    mention_count: 28,
-    trend_percentage: 12,
-    confidence_level: "medium",
-    source_type: "seed",
-    created_at: now,
-    updated_at: now
-  },
-  {
-    id: "80000000-0000-4000-8000-000000000350",
-    bike_brand: "Royal Enfield",
-    bike_model: "Classic 350",
-    component: "Chain/Sprocket",
-    issue_title: "Chain noise after city riding",
-    issue_summary: "Chain noise and adjustment complaints appear around frequent stop-go riding and delayed lubrication intervals.",
-    severity: "low",
-    mileage_band: "4,000-10,000 km",
-    mention_count: 19,
-    trend_percentage: 6,
-    confidence_level: "low",
-    source_type: "seed",
-    created_at: now,
-    updated_at: now
-  },
-  {
-    id: "90000000-0000-4000-8000-000000000350",
-    bike_brand: "Honda",
-    bike_model: "CB350",
-    component: "Chain/Sprocket",
-    issue_title: "Chain noise / early adjustment need",
-    issue_summary: "Some riders log chain noise or frequent adjustment needs during city use and monsoon riding.",
-    severity: "low",
-    mileage_band: "3,000-9,000 km",
-    mention_count: 21,
-    trend_percentage: 7,
-    confidence_level: "low",
-    source_type: "seed",
     created_at: now,
     updated_at: now
   }

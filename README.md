@@ -1,95 +1,144 @@
 # 350x Garage
 
-350x Garage is a low-cost rider intelligence and bike health logging MVP for 350cc+ motorcycles in India. It captures first-party rider data such as bike details, odometer readings, service logs, service bills, and symptoms, then shows seed model-wise issue intelligence and simple rule-based component risk scores.
+350x Garage is a rider-intelligence platform for 350cc+ motorcycles in India, built **inform-first**:
+anyone can browse what typically goes wrong with their exact motorcycle — organized by **service
+checkpoint (mileage)**, **manufacturing batch**, and **RPM band** — with symptoms to watch, preventive
+actions, and rough repair-cost bands. No account needed to browse.
 
-This version intentionally does not do predictive maintenance, OCR, unofficial scraping, or Facebook/Instagram scraping.
+Tracking your own bike (garage, service logs with bill uploads, symptom logs, and rule-based component
+risk scores) is an explicit **opt-in** behind "Track my bike" — never the front door.
 
-## Tech Stack
+All knowledge is labelled with a source type, confidence level, and last-verified date. These are early
+indicators from curated research and public ownership reports, **not OEM-certified diagnostics**.
 
-- Next.js App Router
-- TypeScript
+## Product surfaces
+
+| Surface | Path | Auth |
+|---|---|---|
+| Landing + model picker | `/` | Public |
+| Model library (all models) | `/models` | Public |
+| Model intelligence (timeline / batch / RPM) | `/models/[brand]/[model]?year=` | Public |
+| Bike Library (search + filters) | `/library` (old `/problem-radar` redirects here) | Public |
+| Data sources & compliance | `/data-sources` | Public |
+| Dashboard, Garage, Service Logs, Symptoms, Health, Settings | `/dashboard` … | Opt-in (login) |
+
+## Tech stack
+
+- Next.js App Router (v16) + React 19 + TypeScript
 - Tailwind CSS
-- Supabase Auth, Postgres, Row Level Security, and Storage
+- Supabase: Postgres, Auth (email/password), Storage, Row Level Security
 - lucide-react icons
+- No paid APIs or services; ingestion uses only free official API tiers
 
-## Local Setup
-
-Install dependencies:
+## Local setup
 
 ```bash
 npm install
+npm run dev   # http://localhost:3000
 ```
 
-Use Node.js `20.9.0` or newer. The project is configured for current Next.js and Supabase packages.
+Node.js `20.9.0+` (Node 22 recommended).
 
-Create `.env.local`:
+Without env vars the app boots in **demo mode**: the public knowledge pages render the curated
+TypeScript seed, the logged-in area uses a demo dataset behind a fake cookie, and all writes are
+disabled. This is what preview deployments show.
+
+`.env.local` for a real backend:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key   # server-only: ingestion + account deletion
+
+# Optional — ingestion stays dormant without these:
+INGEST_CRON_SECRET=any_long_random_string          # enables POST/GET /api/ingest (CRON_SECRET also works)
+YOUTUBE_API_KEY=...                                # YouTube Data API v3
+REDDIT_CLIENT_ID=...                               # Reddit OAuth script app
+REDDIT_CLIENT_SECRET=...
+RSS_FEED_URLS=https://example.com/feed.xml,...     # comma-separated public feeds
 ```
 
-`SUPABASE_SERVICE_ROLE_KEY` is included for future server/admin use. Do not expose it to client components.
+Never expose `SUPABASE_SERVICE_ROLE_KEY` or the ingestion keys to the client.
 
-Run the app:
+## Supabase setup
+
+Create a project, then run the SQL files from `supabase/migrations` in the SQL editor:
+
+1. `001_initial_schema.sql` — profiles, bikes, service_logs, symptom_logs, legacy issue_clusters, `service-bills` bucket
+2. `002_rls_policies.sql` — per-user RLS + storage policies
+3. `003_seed_issue_clusters.sql` — **legacy, optional** (superseded by known_issues; harmless to skip)
+4. `004_known_issues.sql` — the knowledge base table, publicly readable, with provenance columns
+5. `005_seed_known_issues.sql` — curated seed content (idempotent upsert)
+
+Bill files upload to the private `service-bills` bucket under `{user_id}/{bike_id}/{timestamp}-{filename}`;
+storage policies restrict access to the owner's folder.
+
+## The knowledge model
+
+`known_issues` is the core table. Beyond title/summary/severity it carries:
+
+- `service_checkpoint_km` — groups issues into the model page's mileage timeline
+- `mfg_year_start` / `mfg_year_end` — manufacturing-window (batch) issues
+- `rpm_band` — rev-specific behaviour (buzz zones, fan cycles)
+- `symptoms_to_watch`, `preventive_action`, `typical_cost_min/max` (₹)
+- Provenance: `source_type`, `source_url`, `confidence_level`, `mention_count`, `last_verified_at`
+
+**Editing seed content:** edit `lib/knowledge/seedKnownIssues.ts` (single source of truth), then run
+`npm run seed:sql` to regenerate `005_seed_known_issues.sql`. Never edit the generated SQL by hand.
+The same TS seed renders directly in demo mode, and `/api/ingest?source=seed` re-syncs it into the DB
+without re-running migrations.
+
+## Ingestion (off by default)
+
+`lib/ingestion/` is a pluggable adapter layer. Each source implements the same `SourceAdapter`
+interface and stays **dormant (no network) until its env keys exist**:
+
+- **YouTube Data API** (`YOUTUBE_API_KEY`) — official API, video titles/descriptions
+- **Reddit API** (`REDDIT_CLIENT_ID/SECRET`) — official OAuth, public posts
+- **RSS/Atom** (`RSS_FEED_URLS`) — public feeds whose terms permit reuse
+
+Raw mentions flow through `normalize.ts` (deterministic, rule-based: component classification,
+mileage/RPM inference, conservative severity) into `known_issues` with a public source URL per row.
+A future LLM pass can replace the summarization step — the adapter and row contracts stay the same.
+
+Runs happen only as a batch via the secret-protected endpoint (never per user request):
 
 ```bash
-npm run dev
+curl -X POST -H "Authorization: Bearer $INGEST_CRON_SECRET" \
+  "https://your-app.vercel.app/api/ingest?source=all"   # or source=seed|youtube|reddit|rss
 ```
 
-Open `http://localhost:3000`.
+To schedule on Vercel, set `CRON_SECRET` in project env (Vercel sends it automatically) and add:
 
-## Supabase Setup
-
-Create a Supabase project, then run the SQL files in order from `supabase/migrations`:
-
-1. `001_initial_schema.sql`
-2. `002_rls_policies.sql`
-3. `003_seed_issue_clusters.sql`
-
-The first migration creates the private `service-bills` storage bucket. Service bill files are uploaded under:
-
-```text
-{user_id}/{bike_id}/{timestamp}-{filename}
+```json
+{ "crons": [{ "path": "/api/ingest?source=all", "schedule": "0 2 * * 0" }] }
 ```
 
-## Migrations and Seed Data
+**Compliance stance:** official APIs and public feeds only; robots.txt, rate limits, and ToS
+respected; **no Facebook/Instagram scraping, ever**; no login-walled scraping; every ingested claim
+stores provenance. `/data-sources` shows the live/dormant status of each adapter.
 
-The schema includes:
+## Deployment (Vercel)
 
-- `profiles`
-- `bikes`
-- `service_logs`
-- `symptom_logs`
-- `issue_clusters`
+1. Push to GitHub and import into Vercel.
+2. Add the Supabase env vars (and optional ingestion vars) in Project Settings.
+3. Run the migrations before first production use.
+4. Deploy with the default build (`npm run build`).
 
-RLS policies ensure users can read and write only their own profile, bikes, service logs, and symptom logs. Authenticated users can read `issue_clusters`.
+## Known limitations
 
-Seed issue clusters cover Royal Enfield Classic 350, Hunter 350, Meteor 350, Himalayan 450, Honda CB350, KTM Duke 390, and Triumph Speed 400.
+- Risk scores are rule-based early indicators, not diagnostics or ML predictions.
+- Ingestion normalization is keyword-based v0; titles/summaries of community rows are generic until
+  the LLM clustering pass lands.
+- No OCR on bills; files are stored privately and served via short-lived signed URLs.
+- Seed content is curated from public ownership patterns and labelled with conservative confidence;
+  it should be reviewed and expanded continuously.
 
-## Deployment Notes for Vercel
+## Roadmap
 
-1. Push the repository to GitHub.
-2. Import it into Vercel.
-3. Add the same Supabase environment variables in Vercel Project Settings.
-4. Run Supabase migrations before first production use.
-5. Deploy with the default Next.js build command.
-
-## Known Limitations
-
-- Risk scores are early rule-based indicators, not OEM-certified diagnostics.
-- Service bill OCR is not implemented.
-- Uploaded bill files are stored privately and listed through temporary signed URLs.
-- No paid APIs or third-party ingestion are used in v0.
-- Delete-my-data is a settings placeholder in this MVP.
-
-## Future Roadmap
-
-- YouTube API ingestion for ownership videos/comments
-- Reddit compliant API ingestion
-- OBD Phase 2 integration
+- LLM-based clustering/summarization inside the existing `normalize.ts` extension point
+- OEM recall/service-bulletin adapter (`source_type: 'oem'`)
+- Consent-first anonymized aggregation of rider logs into the public knowledge base
 - OCR extraction from service bills
-- Component lifecycle prediction after enough labelled service/failure data
-- Mechanic/dealer dashboard
-- Used-bike inspection report
+- Component lifecycle prediction once enough labelled service/failure data exists
+- Mechanic/dealer dashboard; used-bike inspection report

@@ -44,7 +44,7 @@ export default async function SymptomsPage({
   return (
     <AppShell title="Symptom Logger" subtitle="Capture rider-observed symptoms with component, severity, frequency, and resolution state.">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <SymptomForm userId={user.id} bikes={typedBikes} serviceLogs={serviceLogs} />
+        <SymptomForm bikes={typedBikes} serviceLogs={serviceLogs} />
         <section className="space-y-4">
           <form className="panel grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <label>
