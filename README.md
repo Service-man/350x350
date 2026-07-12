@@ -68,7 +68,12 @@ Create a project, then run the SQL files from `supabase/migrations` in the SQL e
 2. `002_rls_policies.sql` — per-user RLS + storage policies
 3. `003_seed_issue_clusters.sql` — **legacy, optional** (superseded by known_issues; harmless to skip)
 4. `004_known_issues.sql` — the knowledge base table, publicly readable, with provenance columns
-5. `005_seed_known_issues.sql` — curated seed content (idempotent upsert)
+5. `005_seed_known_issues.sql` — curated known-issue seed (idempotent upsert)
+6. `006_bike_catalog.sql` — the reference model catalogue table, publicly readable
+7. `007_seed_bike_catalog.sql` — the 300cc+ India model catalogue seed (idempotent upsert)
+
+The catalogue (`lib/catalog/bikeCatalog.ts`) and the known-issue seed (`lib/knowledge/seedKnownIssues.ts`)
+are the single sources of truth; run `npm run seed:sql` to regenerate `005` and `007` after editing them.
 
 Bill files upload to the private `service-bills` bucket under `{user_id}/{bike_id}/{timestamp}-{filename}`;
 storage policies restrict access to the owner's folder.

@@ -68,15 +68,17 @@ export default function LandingPage() {
           <div className="mt-6 border-t border-stone-200 pt-4">
             <p className="label">Popular models</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              {MODEL_ROUTES.slice(0, 5).map((route) => (
-                <Link
-                  key={`${route.brandSlug}-${route.modelSlug}`}
-                  href={`/models/${route.brandSlug}/${route.modelSlug}`}
-                  className="rounded bg-paper px-3 py-1.5 text-xs font-semibold text-road transition hover:bg-mint hover:text-leaf"
-                >
-                  {route.model}
-                </Link>
-              ))}
+              {MODEL_ROUTES.filter((route) => route.entry.popular)
+                .slice(0, 8)
+                .map((route) => (
+                  <Link
+                    key={`${route.brandSlug}-${route.modelSlug}`}
+                    href={`/models/${route.brandSlug}/${route.modelSlug}`}
+                    className="rounded bg-paper px-3 py-1.5 text-xs font-semibold text-road transition hover:bg-mint hover:text-leaf"
+                  >
+                    {route.model}
+                  </Link>
+                ))}
             </div>
           </div>
         </div>

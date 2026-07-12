@@ -565,7 +565,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   // ── KTM Duke 390 ────────────────────────────────────────────────────────
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "Engine/Cooling",
     issue_title: "Radiator fan cycles frequently in dense traffic",
     issue_summary:
@@ -583,7 +583,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   }),
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "Chain/Sprocket",
     issue_title: "Chain-sprocket kit wears by 18-25k with spirited riding",
     issue_summary:
@@ -601,7 +601,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   }),
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "Brake Pads",
     issue_title: "Fast pad wear with aggressive city riding",
     issue_summary:
@@ -619,7 +619,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   }),
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "Electrical",
     issue_title: "TFT display fogging on early display-equipped gen",
     issue_summary:
@@ -638,7 +638,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   }),
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "Electrical",
     issue_title: "Regulator-rectifier failures on older generation",
     issue_summary:
@@ -657,7 +657,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   }),
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "Clutch",
     issue_title: "Clutch slip after sustained hard launches",
     issue_summary:
@@ -675,7 +675,7 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
   }),
   issue({
     brand: "KTM",
-    model: "Duke 390",
+    model: "390 Duke",
     component: "General Ownership",
     issue_title: "Tank and seat buzz in the 7-8k rpm band",
     issue_summary:
@@ -779,6 +779,537 @@ export const SEED_KNOWN_ISSUES: KnownIssueSeed[] = [
     typical_cost_min: 0,
     typical_cost_max: 3000,
     mention_count: 9,
+    trend_percentage: 2,
+    confidence_level: "low"
+  }),
+
+  // ── Royal Enfield Bullet 350 (J-platform) ───────────────────────────────
+  issue({
+    brand: "Royal Enfield",
+    model: "Bullet 350",
+    component: "Gearbox",
+    issue_title: "Notchy shifts and hunting for neutral in traffic",
+    issue_summary:
+      "The J-series gearbox is smoother than the old Bullet, but owners still report notchy 1-2 shifts and hunting for neutral at stoplights until it's warm.",
+    severity: "low",
+    mileage_band: "5,000-15,000 km",
+    service_checkpoint_km: 10000,
+    symptoms_to_watch: "False neutrals, clunk into first, stiff shifts before warm-up",
+    preventive_action: "Use the specified oil grade, set clutch free play at service, and blip into neutral just before stopping.",
+    typical_cost_min: 300,
+    typical_cost_max: 2000,
+    mention_count: 16,
+    trend_percentage: 4,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Royal Enfield",
+    model: "Bullet 350",
+    component: "Brake Pads",
+    issue_title: "Rear drum brake needs firm input on base variant",
+    issue_summary:
+      "Base Bullet 350 trims run a rear drum; owners report vague, wooden feel and needing a firm push versus the disc variants.",
+    severity: "low",
+    mileage_band: "Any",
+    symptoms_to_watch: "Long rear pedal travel, weak bite, squeal after monsoon rides",
+    preventive_action: "Get the drum cleaned and shoes adjusted at service; consider the disc variant if you brake hard often.",
+    typical_cost_min: 300,
+    typical_cost_max: 1200,
+    mention_count: 10,
+    trend_percentage: 2,
+    confidence_level: "low"
+  }),
+
+  // ── Royal Enfield Interceptor 650 / Continental GT 650 ───────────────────
+  issue({
+    brand: "Royal Enfield",
+    model: "Interceptor 650",
+    component: "Brake Pads",
+    issue_title: "Soft front brake bite, many owners upgrade pads",
+    issue_summary:
+      "The single front disc with ByBre caliper is widely called adequate-not-sharp; owners commonly fit better pads or braided lines for more bite.",
+    severity: "medium",
+    mileage_band: "0-15,000 km",
+    service_checkpoint_km: 10000,
+    symptoms_to_watch: "Long lever pull for hard stops, fade on repeated braking two-up",
+    preventive_action: "Bed pads properly, keep fluid fresh, and consider sintered pads / braided line if you ride fast.",
+    typical_cost_min: 1200,
+    typical_cost_max: 6000,
+    mention_count: 24,
+    trend_percentage: 5,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Royal Enfield",
+    model: "Interceptor 650",
+    component: "General Ownership",
+    issue_title: "Handlebar and peg buzz around 5,500-6,500 rpm",
+    issue_summary:
+      "The 648 twin is smooth low down but a vibration patch appears around 100-120 km/h on longer runs; mirrors blur and palms tingle.",
+    severity: "low",
+    rpm_band: "5,500-6,500 rpm",
+    symptoms_to_watch: "Mirror blur and numb hands on sustained highway cruising",
+    preventive_action: "Bar-end weights and cush grips help; cruise just below the buzz band on long days.",
+    typical_cost_min: 0,
+    typical_cost_max: 2000,
+    mention_count: 19,
+    trend_percentage: 3,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Royal Enfield",
+    model: "Continental GT 650",
+    component: "General Ownership",
+    issue_title: "Committed riding posture strains wrists in city",
+    issue_summary:
+      "The cafe-racer clip-ons put weight on the wrists; owners report wrist and lower-back fatigue in stop-go traffic more than on the Interceptor.",
+    severity: "low",
+    mileage_band: "Any",
+    symptoms_to_watch: "Wrist and neck ache after city commutes, numb palms at idle",
+    preventive_action: "Consider raised bars/risers if you commute daily; the ache is ergonomics, not a fault.",
+    typical_cost_min: 0,
+    typical_cost_max: 4000,
+    mention_count: 12,
+    trend_percentage: 2,
+    confidence_level: "low"
+  }),
+  issue({
+    brand: "Royal Enfield",
+    model: "Super Meteor 650",
+    component: "Tyres",
+    issue_title: "Tube-type tyres and weight make punctures a chore",
+    issue_summary:
+      "The cruiser's weight plus tube-type rubber means a puncture usually needs the wheel off; touring owners flag this on long rides.",
+    severity: "low",
+    mileage_band: "10,000-20,000 km",
+    service_checkpoint_km: 15000,
+    symptoms_to_watch: "Sudden deflation, squared rear profile from highway miles",
+    preventive_action: "Carry a repair kit, keep pressures correct for the load, and budget rear tyre replacement around 15,000 km.",
+    typical_cost_min: 3000,
+    typical_cost_max: 8000,
+    mention_count: 11,
+    trend_percentage: 3,
+    confidence_level: "low"
+  }),
+
+  // ── Royal Enfield Guerrilla 450 (Sherpa engine) ─────────────────────────
+  issue({
+    brand: "Royal Enfield",
+    model: "Guerrilla 450",
+    component: "Engine/Cooling",
+    issue_title: "Liquid-cooled engine runs warm in city traffic",
+    issue_summary:
+      "Sharing the Sherpa 450 engine with the Himalayan, the Guerrilla runs warm in crawling traffic; owners note thigh heat and long fan cycles.",
+    severity: "medium",
+    mileage_band: "0-10,000 km",
+    service_checkpoint_km: 5000,
+    symptoms_to_watch: "Fan running long at idle, heat on the right thigh, temperature bars climbing in jams",
+    preventive_action: "Keep coolant to spec, radiator fins clean, and avoid extended idling in gridlock.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 17,
+    trend_percentage: 6,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Royal Enfield",
+    model: "Guerrilla 450",
+    component: "Electrical",
+    issue_title: "Early-build electronic and cluster niggles",
+    issue_summary:
+      "As with the early Himalayan 450, first-year Guerrilla owners report occasional warning lights, cluster glitches, and side-stand cutoffs, addressed via dealer updates.",
+    severity: "medium",
+    mfg_year_start: 2024,
+    mfg_year_end: 2025,
+    mileage_band: "0-8,000 km",
+    symptoms_to_watch: "Spurious warnings, TFT reboots, engine cutting when shifting with stand up",
+    preventive_action: "Apply dealer software updates and log each occurrence with date/odometer for warranty.",
+    typical_cost_min: 0,
+    typical_cost_max: 2000,
+    mention_count: 13,
+    trend_percentage: 5,
+    confidence_level: "low"
+  }),
+
+  // ── Royal Enfield Himalayan 411 (BS6) ───────────────────────────────────
+  issue({
+    brand: "Royal Enfield",
+    model: "Himalayan 411",
+    component: "Engine/Cooling",
+    issue_title: "Tappet/valve noise needs periodic adjustment",
+    issue_summary:
+      "The air-cooled LS410 develops audible tappet noise and benefits from periodic valve-clearance checks; neglect leads to rough running.",
+    severity: "medium",
+    mileage_band: "10,000-30,000 km",
+    service_checkpoint_km: 10000,
+    symptoms_to_watch: "Ticking from the head that worsens when hot, rough idle, dropping fuel economy",
+    preventive_action: "Have valve clearances checked every 10,000 km and keep to the oil-change interval.",
+    typical_cost_min: 500,
+    typical_cost_max: 2500,
+    mention_count: 22,
+    trend_percentage: 3,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Royal Enfield",
+    model: "Himalayan 411",
+    component: "Electrical",
+    issue_title: "Stalling and weak low-end on early BS6 units",
+    issue_summary:
+      "Some 2020-2021 BS6 Himalayan owners reported stalling at low revs and hesitant fueling; dealer ECU updates improved it.",
+    severity: "medium",
+    mfg_year_start: 2020,
+    mfg_year_end: 2021,
+    mileage_band: "0-15,000 km",
+    symptoms_to_watch: "Engine dying at low rpm/clutch-in, hesitation off idle in traffic",
+    preventive_action: "Get the latest ECU calibration from the dealer; keep the battery and connectors healthy.",
+    typical_cost_min: 0,
+    typical_cost_max: 2000,
+    mention_count: 18,
+    trend_percentage: 2,
+    confidence_level: "medium"
+  }),
+
+  // ── Harley-Davidson X440 (Hero-built) ───────────────────────────────────
+  issue({
+    brand: "Harley-Davidson",
+    model: "X440",
+    component: "Gearbox",
+    issue_title: "Notchy gearbox and false neutrals on early batches",
+    issue_summary:
+      "Early X440 owners widely reported a clunky gearbox, missed shifts, and false neutrals; Hero addressed some units under service/updates.",
+    severity: "medium",
+    mfg_year_start: 2023,
+    mfg_year_end: 2024,
+    mileage_band: "0-10,000 km",
+    service_checkpoint_km: 5000,
+    symptoms_to_watch: "False neutrals between 1st-3rd, hard engagement, clunk on downshift",
+    preventive_action: "Ensure the correct oil and clutch adjustment at service; ask the dealer about gearbox updates for early VINs.",
+    typical_cost_min: 0,
+    typical_cost_max: 3000,
+    mention_count: 27,
+    trend_percentage: 8,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Harley-Davidson",
+    model: "X440",
+    component: "Electrical",
+    issue_title: "Switchgear and instrument niggles on launch units",
+    issue_summary:
+      "First-year owners report inconsistent switch feel, occasional display/connectivity glitches, and fuel-gauge quirks on the LCD cluster.",
+    severity: "low",
+    mfg_year_start: 2023,
+    mfg_year_end: 2024,
+    mileage_band: "0-8,000 km",
+    symptoms_to_watch: "Switches needing a firm press, app/Bluetooth drops, jumpy fuel reading",
+    preventive_action: "Have contacts cleaned and firmware updated at service; log recurring faults for warranty.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 15,
+    trend_percentage: 4,
+    confidence_level: "low"
+  }),
+
+  // ── Honda CB350RS ───────────────────────────────────────────────────────
+  issue({
+    brand: "Honda",
+    model: "CB350RS",
+    component: "Fuel System",
+    issue_title: "Snatchy low-speed throttle response",
+    issue_summary:
+      "Like the H'ness CB350, RS owners note abrupt on/off throttle at crawling speeds, making smooth traffic riding tricky at first.",
+    severity: "low",
+    mileage_band: "0-10,000 km",
+    symptoms_to_watch: "Jerky pickup from closed throttle, lurching in bumper-to-bumper traffic",
+    preventive_action: "Smooth clutch modulation helps; ensure throttle-body cleaning at service and updated maps if offered.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 12,
+    trend_percentage: 2,
+    confidence_level: "low"
+  }),
+
+  // ── Jawa 42 (Classic Legends, 334cc) ────────────────────────────────────
+  issue({
+    brand: "Jawa",
+    model: "Jawa 42",
+    component: "Engine/Cooling",
+    issue_title: "Engine heat and rear-cylinder warmth in slow traffic",
+    issue_summary:
+      "The 334cc liquid-cooled single runs warm in city crawling; owners commonly report heat on the right leg and long fan runs.",
+    severity: "medium",
+    mileage_band: "0-12,000 km",
+    service_checkpoint_km: 5000,
+    symptoms_to_watch: "Right-leg heat in jams, fan cycling continuously, temperature climbing at idle",
+    preventive_action: "Keep coolant topped, radiator clean, and minimise long idles; check the fan works at service.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 20,
+    trend_percentage: 4,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Jawa",
+    model: "Jawa 42",
+    component: "General Ownership",
+    issue_title: "Service network and parts wait times outside metros",
+    issue_summary:
+      "Owners consistently flag limited service touchpoints and occasional parts delays for Classic Legends bikes away from big cities.",
+    severity: "medium",
+    mileage_band: "Any",
+    symptoms_to_watch: "Long distances to a service centre, waits for body panels or consumables",
+    preventive_action: "Plan services ahead, keep consumables stocked, and confirm parts availability before booking.",
+    typical_cost_min: null,
+    typical_cost_max: null,
+    mention_count: 17,
+    trend_percentage: 5,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Jawa",
+    model: "Jawa 42",
+    component: "Gearbox",
+    issue_title: "Notchy gearbox and false neutrals reported",
+    issue_summary:
+      "Owners report a stiff gearbox and occasional false neutrals, especially cold, improving somewhat after run-in and fresh oil.",
+    severity: "low",
+    mileage_band: "0-15,000 km",
+    service_checkpoint_km: 10000,
+    symptoms_to_watch: "Missed shifts, false neutral into 2nd, heavy clutch in traffic",
+    preventive_action: "Stick to the oil interval and get clutch/cable adjustment at service.",
+    typical_cost_min: 300,
+    typical_cost_max: 2000,
+    mention_count: 13,
+    trend_percentage: 3,
+    confidence_level: "low"
+  }),
+
+  // ── Yezdi Adventure (334cc) ─────────────────────────────────────────────
+  issue({
+    brand: "Yezdi",
+    model: "Adventure",
+    component: "Engine/Cooling",
+    issue_title: "Heat management complaints in city traffic",
+    issue_summary:
+      "The Yezdi Adventure's 334cc single is widely reported to run hot in slow traffic, with noticeable heat reaching the rider.",
+    severity: "medium",
+    mileage_band: "0-12,000 km",
+    service_checkpoint_km: 5000,
+    symptoms_to_watch: "Heat on legs in jams, fan running constantly, temperature warnings on hot days",
+    preventive_action: "Maintain coolant, keep the radiator clean after trails, and avoid extended idling.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 16,
+    trend_percentage: 4,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Yezdi",
+    model: "Adventure",
+    component: "Electrical",
+    issue_title: "Fit-finish and electrical niggles on early units",
+    issue_summary:
+      "Early owners report switch, indicator, and console niggles plus fit-and-finish issues, generally sorted under warranty.",
+    severity: "low",
+    mfg_year_start: 2022,
+    mfg_year_end: 2023,
+    mileage_band: "0-10,000 km",
+    symptoms_to_watch: "Flickering indicators, console glitches, loose panels or rattles",
+    preventive_action: "Log issues early and use warranty visits to reseat connectors and tighten fasteners.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 12,
+    trend_percentage: 2,
+    confidence_level: "low"
+  }),
+
+  // ── BMW G 310 R / G 310 GS (TVS-built 313cc) ────────────────────────────
+  issue({
+    brand: "BMW",
+    model: "G 310 R",
+    component: "Fuel System",
+    issue_title: "Stalling and fuel-pump issues on early (2018-2020) units",
+    issue_summary:
+      "First-generation G 310 R/GS owners reported stalling at low revs and fuel-pump failures; BMW addressed many under warranty and later revisions improved it.",
+    severity: "high",
+    mfg_year_start: 2018,
+    mfg_year_end: 2020,
+    mileage_band: "0-20,000 km",
+    symptoms_to_watch: "Stalling at idle/low rpm, no-start, whining or dead fuel pump",
+    preventive_action: "Ensure recall/warranty fuel-pump work was done; keep fuel clean and battery healthy.",
+    typical_cost_min: 0,
+    typical_cost_max: 12000,
+    mention_count: 21,
+    trend_percentage: 2,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "BMW",
+    model: "G 310 GS",
+    component: "Chain/Sprocket",
+    issue_title: "Chain and rear sprocket wear with mixed use",
+    issue_summary:
+      "G 310 GS owners report the chain needing frequent adjustment and the sprocket wearing by ~20,000 km, especially with light off-road use.",
+    severity: "low",
+    mileage_band: "12,000-22,000 km",
+    service_checkpoint_km: 20000,
+    symptoms_to_watch: "Frequent slack adjustment, hooked sprocket teeth, chain noise",
+    preventive_action: "Clean and lube regularly (more in the wet/dust) and budget a chain kit near 20,000 km.",
+    typical_cost_min: 3000,
+    typical_cost_max: 8000,
+    mention_count: 12,
+    trend_percentage: 3,
+    confidence_level: "low"
+  }),
+
+  // ── Bajaj Dominar 400 ───────────────────────────────────────────────────
+  issue({
+    brand: "Bajaj",
+    model: "Dominar 400",
+    component: "General Ownership",
+    issue_title: "Rear wheel bearing wear reported over time",
+    issue_summary:
+      "A recurring Dominar 400 ownership note is rear wheel bearing wear, showing up as play or a rumble from the rear at higher mileage.",
+    severity: "medium",
+    mileage_band: "20,000-40,000 km",
+    service_checkpoint_km: 20000,
+    symptoms_to_watch: "Rumble or humming from the rear at speed, play when rocking the rear wheel",
+    preventive_action: "Have wheel bearings checked at major services and replaced promptly if play develops.",
+    typical_cost_min: 800,
+    typical_cost_max: 3000,
+    mention_count: 18,
+    trend_percentage: 3,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Bajaj",
+    model: "Dominar 400",
+    component: "General Ownership",
+    issue_title: "Vibrations creep in at sustained highway revs",
+    issue_summary:
+      "Owners report vibration through the pegs and bars when holding ~6,000-7,000 rpm on the highway for long stretches.",
+    severity: "low",
+    rpm_band: "6,000-7,000 rpm",
+    symptoms_to_watch: "Tingling pegs and bars on long highway runs, mirror blur near the band",
+    preventive_action: "Check engine-mount and fastener torque at service; cruise slightly below the buzz band.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 14,
+    trend_percentage: 2,
+    confidence_level: "low"
+  }),
+
+  // ── Hero Mavrick 440 ────────────────────────────────────────────────────
+  issue({
+    brand: "Hero MotoCorp",
+    model: "Mavrick 440",
+    component: "General Ownership",
+    issue_title: "Vibration through tank and pegs at higher revs",
+    issue_summary:
+      "Early Mavrick 440 reviews and owners note buzzy vibrations through the tank and pegs as revs climb, more than rivals in the class.",
+    severity: "medium",
+    rpm_band: "5,000-6,500 rpm",
+    mileage_band: "0-10,000 km",
+    symptoms_to_watch: "Buzzy tank and pegs on acceleration, numb feet on longer rides",
+    preventive_action: "Have mounts/fasteners checked; treat mild buzz as character but flag sudden increases to the dealer.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 15,
+    trend_percentage: 5,
+    confidence_level: "low"
+  }),
+  issue({
+    brand: "Hero MotoCorp",
+    model: "Mavrick 440",
+    component: "Gearbox",
+    issue_title: "Gearshift and false-neutral niggles on early units",
+    issue_summary:
+      "First-year Mavrick 440 owners report occasional false neutrals and a not-quite-slick gearbox, easing with run-in and fresh oil.",
+    severity: "low",
+    mfg_year_start: 2024,
+    mfg_year_end: 2025,
+    mileage_band: "0-8,000 km",
+    symptoms_to_watch: "False neutral into 2nd, notchy cold shifts, clutch feel",
+    preventive_action: "Complete the first service on time and get clutch free play set; report persistent issues for warranty.",
+    typical_cost_min: 0,
+    typical_cost_max: 2000,
+    mention_count: 12,
+    trend_percentage: 4,
+    confidence_level: "low"
+  }),
+
+  // ── KTM 390 Adventure / RC 390 ──────────────────────────────────────────
+  issue({
+    brand: "KTM",
+    model: "390 Adventure",
+    component: "Engine/Cooling",
+    issue_title: "Fan cycles and engine heat in city traffic",
+    issue_summary:
+      "Like the Duke, the 390 Adventure runs warm in traffic with frequent fan cycling; generally normal but worth monitoring on hot days.",
+    severity: "medium",
+    mileage_band: "0-20,000 km",
+    service_checkpoint_km: 5000,
+    symptoms_to_watch: "Fan toggling constantly in jams, temperature warnings, coolant smell after shutdown",
+    preventive_action: "Keep coolant to spec, clean the radiator (especially after trails), and avoid long idling.",
+    typical_cost_min: 0,
+    typical_cost_max: 2000,
+    mention_count: 18,
+    trend_percentage: 4,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "KTM",
+    model: "RC 390",
+    component: "Engine/Cooling",
+    issue_title: "Heat build-up from fairing in slow traffic",
+    issue_summary:
+      "The full fairing traps heat in traffic; RC 390 owners report significant warmth on the legs during city crawling.",
+    severity: "medium",
+    mileage_band: "0-20,000 km",
+    service_checkpoint_km: 5000,
+    symptoms_to_watch: "Leg heat from the fairing in jams, fan running long, temperature warnings",
+    preventive_action: "Minimise idling in gridlock, keep coolant/radiator healthy, and take breaks on hot days.",
+    typical_cost_min: 0,
+    typical_cost_max: 2000,
+    mention_count: 16,
+    trend_percentage: 3,
+    confidence_level: "medium"
+  }),
+
+  // ── Triumph Scrambler 400 X / Trident 660 ───────────────────────────────
+  issue({
+    brand: "Triumph",
+    model: "Scrambler 400 X",
+    component: "Chain/Sprocket",
+    issue_title: "New-chain stretch needs an early adjustment",
+    issue_summary:
+      "Sharing the 398cc single with the Speed 400, Scrambler owners report chain slack growing quickly in the first 1,000-3,000 km before it settles.",
+    severity: "low",
+    mileage_band: "500-3,000 km",
+    service_checkpoint_km: 3000,
+    symptoms_to_watch: "Slack growing in the first weeks, light lash on throttle transitions",
+    preventive_action: "Check slack at 1,000 km rather than waiting for the interval; it stabilises after bedding in.",
+    typical_cost_min: 200,
+    typical_cost_max: 600,
+    mention_count: 12,
+    trend_percentage: 3,
+    confidence_level: "medium"
+  }),
+  issue({
+    brand: "Triumph",
+    model: "Trident 660",
+    component: "Fuel System",
+    issue_title: "Low-speed fueling can feel snatchy",
+    issue_summary:
+      "Some Trident 660 owners report abrupt fueling at very low speeds and a slightly hesitant response, improved by map updates.",
+    severity: "low",
+    mileage_band: "0-15,000 km",
+    symptoms_to_watch: "Jerky pickup from closed throttle in traffic, hesitation off idle",
+    preventive_action: "Ride in a taller gear at crawl speeds and ensure the latest ECU map at service.",
+    typical_cost_min: 0,
+    typical_cost_max: 1500,
+    mention_count: 11,
     trend_percentage: 2,
     confidence_level: "low"
   })

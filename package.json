@@ -10,7 +10,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
-    "seed:sql": "tsx scripts/generate-known-issues-sql.ts"
+    "seed:sql": "tsx scripts/generate-known-issues-sql.ts && tsx scripts/generate-catalog-sql.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

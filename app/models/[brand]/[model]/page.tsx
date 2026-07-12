@@ -69,7 +69,17 @@ export default async function ModelIntelligencePage({ params, searchParams }: Pa
           <div>
             <p className="text-sm font-medium text-leaf">{route.brand}</p>
             <h1 className="mt-1 text-3xl font-semibold text-ink">{route.model}</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-steel">
+            <div className="mt-2 flex flex-wrap gap-2 text-xs font-medium text-road">
+              <span className="rounded bg-paper px-2 py-1">{route.entry.engine_cc}cc</span>
+              <span className="rounded bg-paper px-2 py-1">{route.entry.body_type}</span>
+              <span className="rounded bg-paper px-2 py-1">
+                {route.entry.year_end
+                  ? `${route.entry.year_start}–${route.entry.year_end}`
+                  : `${route.entry.year_start}–present`}
+              </span>
+              <span className="rounded bg-paper px-2 py-1">{route.entry.retail_band}</span>
+            </div>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-steel">
               {issues.length} known issue{issues.length === 1 ? "" : "s"} from curated research and public
               ownership reports{year ? ` — highlighting what applies to a ${year} build` : ""}. Early
               indicators, not OEM-certified diagnostics.
