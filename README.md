@@ -71,6 +71,7 @@ Create a project, then run the SQL files from `supabase/migrations` in the SQL e
 5. `005_seed_known_issues.sql` — curated known-issue seed (idempotent upsert)
 6. `006_bike_catalog.sql` — the reference model catalogue table, publicly readable
 7. `007_seed_bike_catalog.sql` — the 300cc+ India model catalogue seed (idempotent upsert)
+8. `008_harden_function_search_path.sql` — pins the trigger function's search_path (security-linter fix)
 
 The catalogue (`lib/catalog/bikeCatalog.ts`) and the known-issue seed (`lib/knowledge/seedKnownIssues.ts`)
 are the single sources of truth; run `npm run seed:sql` to regenerate `005` and `007` after editing them.
