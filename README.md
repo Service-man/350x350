@@ -56,9 +56,13 @@ YOUTUBE_API_KEY=...                                # YouTube Data API v3
 REDDIT_CLIENT_ID=...                               # Reddit OAuth script app
 REDDIT_CLIENT_SECRET=...
 RSS_FEED_URLS=https://example.com/feed.xml,...     # comma-separated public feeds
+
+# Optional — AI validation/enrichment stays dormant without this:
+ANTHROPIC_API_KEY=...                              # enables the Claude validate + propose-fix pass
+ANTHROPIC_MODEL=claude-opus-4-8                    # optional override (defaults to claude-opus-4-8)
 ```
 
-Never expose `SUPABASE_SERVICE_ROLE_KEY` or the ingestion keys to the client.
+Never expose `SUPABASE_SERVICE_ROLE_KEY`, the ingestion keys, or `ANTHROPIC_API_KEY` to the client.
 
 ## Supabase setup
 
@@ -72,6 +76,7 @@ Create a project, then run the SQL files from `supabase/migrations` in the SQL e
 6. `006_bike_catalog.sql` — the reference model catalogue table, publicly readable
 7. `007_seed_bike_catalog.sql` — the 300cc+ India model catalogue seed (idempotent upsert)
 8. `008_harden_function_search_path.sql` — pins the trigger function's search_path (security-linter fix)
+9. `009_add_possible_solution.sql` — adds the `possible_solution` column the AI enrichment pass fills
 
 The catalogue (`lib/catalog/bikeCatalog.ts`) and the known-issue seed (`lib/knowledge/seedKnownIssues.ts`)
 are the single sources of truth; run `npm run seed:sql` to regenerate `005` and `007` after editing them.
@@ -86,7 +91,7 @@ storage policies restrict access to the owner's folder.
 - `service_checkpoint_km` — groups issues into the model page's mileage timeline
 - `mfg_year_start` / `mfg_year_end` — manufacturing-window (batch) issues
 - `rpm_band` — rev-specific behaviour (buzz zones, fan cycles)
-- `symptoms_to_watch`, `preventive_action`, `typical_cost_min/max` (₹)
+- `symptoms_to_watch`, `preventive_action`, `possible_solution`, `typical_cost_min/max` (₹)
 - Provenance: `source_type`, `source_url`, `confidence_level`, `mention_count`, `last_verified_at`
 
 **Editing seed content:** edit `lib/knowledge/seedKnownIssues.ts` (single source of truth), then run
@@ -104,25 +109,40 @@ interface and stays **dormant (no network) until its env keys exist**:
 - **RSS/Atom** (`RSS_FEED_URLS`) — public feeds whose terms permit reuse
 
 Raw mentions flow through `normalize.ts` (deterministic, rule-based: component classification,
-mileage/RPM inference, conservative severity) into `known_issues` with a public source URL per row.
-A future LLM pass can replace the summarization step — the adapter and row contracts stay the same.
+mileage/RPM inference, conservative severity) into candidate rows with a public source URL each.
+
+**AI validation & enrichment (`lib/ingestion/llm/`, dormant without `ANTHROPIC_API_KEY`):** each
+candidate is reviewed by Claude before it can enter `known_issues`. The model confirms whether the
+pattern is a real, model-specific issue, rewrites the title/summary, sets a conservative severity, and
+proposes a concrete fix (`possible_solution`). Rejected noise is dropped; curated seed rows are never
+deleted. Its structured output is re-validated against a Zod schema (`IssueValidationSchema`) before
+anything is written. Without the key, ingestion still runs with the deterministic rows only.
+
+**Bounded contracts (`lib/ingestion/contracts.ts`):** every value crossing an edge — an adapter's raw
+mention, the LLM's structured answer, a row headed for the database, and the `/api/ingest`
+request/response — is parsed against a Zod schema, so malformed data fails at the boundary instead of
+corrupting the knowledge base.
 
 Runs happen only as a batch via the secret-protected endpoint (never per user request):
 
 ```bash
 curl -X POST -H "Authorization: Bearer $INGEST_CRON_SECRET" \
-  "https://your-app.vercel.app/api/ingest?source=all"   # or source=seed|youtube|reddit|rss
+  "https://your-app.vercel.app/api/ingest?source=all"
+# source=all | seed | youtube | reddit | rss | reprocess
+# reprocess = re-validate & enrich existing rows that have no proposed fix yet (bounded batch)
 ```
 
-To schedule on Vercel, set `CRON_SECRET` in project env (Vercel sends it automatically) and add:
+**Scheduled monthly** via `vercel.json` → `crons` (`0 3 1 * *`, 03:00 UTC on the 1st). Vercel Cron
+sends `Authorization: Bearer $CRON_SECRET`, so set `CRON_SECRET` in project env to enable the schedule:
 
 ```json
-{ "crons": [{ "path": "/api/ingest?source=all", "schedule": "0 2 * * 0" }] }
+{ "crons": [{ "path": "/api/ingest?source=all", "schedule": "0 3 1 * *" }] }
 ```
 
 **Compliance stance:** official APIs and public feeds only; robots.txt, rate limits, and ToS
 respected; **no Facebook/Instagram scraping, ever**; no login-walled scraping; every ingested claim
-stores provenance. `/data-sources` shows the live/dormant status of each adapter.
+stores provenance; the AI pass is instructed never to fabricate figures, dates, or prices.
+`/data-sources` shows the live/dormant status of each adapter and the AI validation pass.
 
 ## Deployment (Vercel)
 
@@ -134,15 +154,16 @@ stores provenance. `/data-sources` shows the live/dormant status of each adapter
 ## Known limitations
 
 - Risk scores are rule-based early indicators, not diagnostics or ML predictions.
-- Ingestion normalization is keyword-based v0; titles/summaries of community rows are generic until
-  the LLM clustering pass lands.
+- Ingestion normalization is keyword-based v0; when `ANTHROPIC_API_KEY` is set the Claude validation
+  pass refines those community rows and proposes fixes, but the LLM does not yet do cross-source
+  clustering (it reviews one candidate at a time).
 - No OCR on bills; files are stored privately and served via short-lived signed URLs.
 - Seed content is curated from public ownership patterns and labelled with conservative confidence;
   it should be reviewed and expanded continuously.
 
 ## Roadmap
 
-- LLM-based clustering/summarization inside the existing `normalize.ts` extension point
+- LLM-based cross-source clustering (the per-candidate validation/enrichment pass already ships)
 - OEM recall/service-bulletin adapter (`source_type: 'oem'`)
 - Consent-first anonymized aggregation of rider logs into the public knowledge base
 - OCR extraction from service bills

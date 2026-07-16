@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { runIngestion } from "@/lib/ingestion/pipeline";
+import { INGEST_SOURCES, IngestResponseSchema, IngestSourceSchema } from "@/lib/ingestion/contracts";
 
 export const dynamic = "force-dynamic";
 
@@ -27,10 +28,19 @@ async function handle(request: NextRequest) {
   const denied = checkAuth(request);
   if (denied) return denied;
 
-  const source = request.nextUrl.searchParams.get("source") ?? "all";
+  // Bound the request: `source` must be one of the known ingestion sources.
+  const parsedSource = IngestSourceSchema.safeParse(request.nextUrl.searchParams.get("source") ?? undefined);
+  if (!parsedSource.success) {
+    return NextResponse.json(
+      { error: `Invalid source. Expected one of: ${INGEST_SOURCES.join(", ")}.` },
+      { status: 400 }
+    );
+  }
+
   try {
-    const outcome = await runIngestion(source);
-    return NextResponse.json(outcome);
+    const outcome = await runIngestion(parsedSource.data);
+    // Bound the response: guarantees the shape the cron/clients rely on.
+    return NextResponse.json(IngestResponseSchema.parse(outcome));
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }

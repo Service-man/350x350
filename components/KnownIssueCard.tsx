@@ -1,4 +1,4 @@
-import { AlertTriangle, CalendarRange, ExternalLink, Eye, Factory, GaugeCircle, Wrench } from "lucide-react";
+import { AlertTriangle, CalendarRange, ExternalLink, Eye, Factory, GaugeCircle, LifeBuoy, Wrench } from "lucide-react";
 import Link from "next/link";
 import type { KnownIssue } from "@/lib/types";
 import { cn, titleCase } from "@/lib/utils";
@@ -103,6 +103,14 @@ export function KnownIssueCard({ issue, showModel = false }: { issue: KnownIssue
             <Wrench className="mt-0.5 h-4 w-4 shrink-0 text-leaf" aria-hidden="true" />
             <span>
               <strong className="text-ink">Do this:</strong> {issue.preventive_action}
+            </span>
+          </p>
+        ) : null}
+        {issue.possible_solution ? (
+          <p className="flex gap-2 text-steel">
+            <LifeBuoy className="mt-0.5 h-4 w-4 shrink-0 text-leaf" aria-hidden="true" />
+            <span>
+              <strong className="text-ink">Possible fix:</strong> {issue.possible_solution}
             </span>
           </p>
         ) : null}

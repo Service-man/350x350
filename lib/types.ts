@@ -107,6 +107,7 @@ export type KnownIssue = {
   rpm_band: string | null;
   symptoms_to_watch: string | null;
   preventive_action: string | null;
+  possible_solution: string | null;
   typical_cost_min: number | null;
   typical_cost_max: number | null;
   mention_count: number;
