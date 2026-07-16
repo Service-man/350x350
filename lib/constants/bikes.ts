@@ -1,12 +1,8 @@
-export const BIKE_MODELS = [
-  { brand: "Royal Enfield", model: "Classic 350" },
-  { brand: "Royal Enfield", model: "Meteor 350" },
-  { brand: "Royal Enfield", model: "Hunter 350" },
-  { brand: "Royal Enfield", model: "Himalayan 450" },
-  { brand: "Honda", model: "CB350" },
-  { brand: "KTM", model: "Duke 390" },
-  { brand: "Triumph", model: "Speed 400" }
-] as const;
+import { BIKE_CATALOG } from "@/lib/catalog/bikeCatalog";
+
+// Derived from the full catalogue so the picker, ingestion, and any consumer
+// stay in sync with lib/catalog/bikeCatalog.ts (the single source of truth).
+export const BIKE_MODELS = BIKE_CATALOG.map(({ brand, model }) => ({ brand, model }));
 
 export const USAGE_TYPES = ["city", "highway", "touring", "offroad", "mixed"] as const;
 export const SERVICE_TYPES = ["periodic", "repair", "inspection", "emergency", "modification"] as const;

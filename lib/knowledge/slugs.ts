@@ -1,4 +1,5 @@
-import { BIKE_MODELS } from "@/lib/constants/bikes";
+import { BIKE_CATALOG } from "@/lib/catalog/bikeCatalog";
+import type { BikeCatalogEntry } from "@/lib/types";
 
 export function slugify(value: string) {
   return value
@@ -13,13 +14,15 @@ export type ModelRoute = {
   model: string;
   brandSlug: string;
   modelSlug: string;
+  entry: BikeCatalogEntry;
 };
 
-export const MODEL_ROUTES: ModelRoute[] = BIKE_MODELS.map((entry) => ({
+export const MODEL_ROUTES: ModelRoute[] = BIKE_CATALOG.map((entry) => ({
   brand: entry.brand,
   model: entry.model,
   brandSlug: slugify(entry.brand),
-  modelSlug: slugify(entry.model)
+  modelSlug: slugify(entry.model),
+  entry
 }));
 
 export function findModelBySlugs(brandSlug: string, modelSlug: string) {

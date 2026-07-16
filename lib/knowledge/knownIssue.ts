@@ -18,6 +18,7 @@ export function issue(input: SeedInput): KnownIssueSeed {
     rpm_band: null,
     symptoms_to_watch: null,
     preventive_action: null,
+    possible_solution: null,
     typical_cost_min: null,
     typical_cost_max: null,
     mention_count: 0,

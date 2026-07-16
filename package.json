@@ -10,9 +10,10 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
-    "seed:sql": "tsx scripts/generate-known-issues-sql.ts"
+    "seed:sql": "tsx scripts/generate-known-issues-sql.ts && tsx scripts/generate-catalog-sql.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.10",
     "clsx": "^2.1.1",
@@ -20,7 +21,8 @@
     "next": "^16.2.6",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

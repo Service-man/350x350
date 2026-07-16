@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Cable, CheckCircle2, FileText, MessageSquare, MoonStar, Rss, ShieldX, Stethoscope, Youtube } from "lucide-react";
+import { BrainCircuit, Cable, CheckCircle2, FileText, MessageSquare, MoonStar, Rss, ShieldX, Stethoscope, Youtube } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { PublicShell } from "@/components/PublicShell";
 import { SOURCE_ADAPTERS } from "@/lib/ingestion/pipeline";
+import { isLlmConfigured } from "@/lib/ingestion/llm/anthropic";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -58,6 +59,7 @@ const staticSources = [
 ];
 
 export default function DataSourcesPage() {
+  const llmConfigured = isLlmConfigured();
   return (
     <PublicShell>
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -101,6 +103,35 @@ export default function DataSourcesPage() {
           })}
         </div>
 
+        <h2 className="mb-4 mt-10 text-lg font-semibold text-ink">AI validation &amp; enrichment</h2>
+        <article className="rounded border border-stone-200 bg-white p-5 shadow-soft">
+          <div className="flex items-start justify-between gap-3">
+            <BrainCircuit className="h-6 w-6 text-leaf" aria-hidden="true" />
+            <span
+              className={cn(
+                "inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-semibold",
+                llmConfigured ? "bg-mint text-leaf" : "bg-stone-100 text-steel"
+              )}
+            >
+              {llmConfigured ? <CheckCircle2 className="h-3 w-3" aria-hidden="true" /> : <MoonStar className="h-3 w-3" aria-hidden="true" />}
+              {llmConfigured ? "Configured" : "Dormant"}
+            </span>
+          </div>
+          <h3 className="mt-4 text-lg font-semibold text-ink">Claude validation pass</h3>
+          <p className="mt-2 text-sm leading-6 text-steel">
+            Freshly aggregated community mentions are reviewed by a language model before they can enter
+            the knowledge base: it confirms whether a pattern is a real, model-specific issue, rewrites the
+            title and summary, sets a conservative severity, and proposes a concrete fix. Rejected noise is
+            dropped; curated seed rows are never removed. The monthly cron also reprocesses existing rows to
+            backfill proposed fixes.
+          </p>
+          <p className="mt-3 text-xs font-medium text-steel">
+            {llmConfigured
+              ? "Runs inside the secret-protected /api/ingest batch job (source=all or source=reprocess)."
+              : "Enable by setting ANTHROPIC_API_KEY. Without it, ingestion still runs with deterministic, rule-based normalization."}
+          </p>
+        </article>
+
         <h2 className="mb-4 mt-10 text-lg font-semibold text-ink">Other sources</h2>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {staticSources.map((source) => {
@@ -133,6 +164,7 @@ export default function DataSourcesPage() {
             <li>• robots.txt, rate limits, and platform ToS are respected; no login-walled scraping.</li>
             <li>• Every ingested claim stores a public source URL and a last-verified timestamp.</li>
             <li>• Ingestion is a scheduled batch job behind a secret — nothing fetches on user requests.</li>
+            <li>• The AI validation pass is instructed to never fabricate figures, dates, or prices, and to label uncertainty; its output is schema-validated before storage.</li>
           </ul>
         </section>
       </div>

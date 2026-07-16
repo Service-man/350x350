@@ -4,6 +4,7 @@ import { KnownIssueCard } from "@/components/KnownIssueCard";
 import { PublicShell } from "@/components/PublicShell";
 import { COMPONENT_OPTIONS } from "@/lib/constants/components";
 import { SEVERITIES } from "@/lib/constants/bikes";
+import { BIKE_CATALOG, CATALOG_BRANDS } from "@/lib/catalog/bikeCatalog";
 import { getKnownIssues } from "@/lib/knowledge/getKnownIssues";
 import { titleCase } from "@/lib/utils";
 
@@ -28,8 +29,15 @@ export default async function LibraryPage({
     q: params.q
   });
 
-  const brands = Array.from(new Set(allIssues.map((issue) => issue.brand))).sort();
-  const models = Array.from(new Set(allIssues.map((issue) => issue.model))).sort();
+  // Filter options come from the full catalogue so every model is selectable,
+  // even ones whose issue set is still empty. When a brand is chosen, scope the
+  // model list to that brand.
+  const brands = CATALOG_BRANDS.slice().sort();
+  const models = Array.from(
+    new Set(
+      BIKE_CATALOG.filter((b) => !params.brand || b.brand === params.brand).map((b) => b.model)
+    )
+  ).sort();
   const bands = Array.from(new Set(allIssues.map((issue) => issue.mileage_band).filter(Boolean))).sort() as string[];
 
   return (

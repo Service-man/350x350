@@ -58,6 +58,35 @@ export type SymptomLog = {
   updated_at: string;
 };
 
+export type BikeBodyType =
+  | "Roadster"
+  | "Cruiser"
+  | "Adventure"
+  | "Scrambler"
+  | "Cafe Racer"
+  | "Modern Classic"
+  | "Sport"
+  | "Bobber"
+  | "Supermoto"
+  | "Enduro"
+  | "Tourer";
+
+// A model in the premium (~300cc+) India catalogue. Distinct from a user's own
+// `bikes` row — this is the reference list that powers the picker and library.
+export type BikeCatalogEntry = {
+  id: string;
+  brand: string;
+  model: string;
+  engine_cc: number;
+  body_type: BikeBodyType;
+  year_start: number;
+  year_end: number | null; // null = still on sale
+  retail_band: string; // retail/service network, e.g. "Honda BigWing"
+  popular: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
 export type ConfidenceLevel = "low" | "medium" | "high";
 export type KnownIssueSourceType = "seed" | "youtube" | "reddit" | "rss" | "oem" | "community";
 
@@ -78,6 +107,7 @@ export type KnownIssue = {
   rpm_band: string | null;
   symptoms_to_watch: string | null;
   preventive_action: string | null;
+  possible_solution: string | null;
   typical_cost_min: number | null;
   typical_cost_max: number | null;
   mention_count: number;
