@@ -2,14 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
 import { BIKE_MODELS } from "@/lib/constants/bikes";
 import { modelPath } from "@/lib/knowledge/slugs";
 
 const YEARS = Array.from({ length: 12 }, (_, index) => 2026 - index);
 
 // The inform-first front door: pick a model, land on its public issue page.
-// No account, no data entry.
+// No account, no data entry. Styled for the landing page's dark hero card.
 export function ModelPicker() {
   const router = useRouter();
   const brands = useMemo(() => Array.from(new Set(BIKE_MODELS.map((entry) => entry.brand))), []);
@@ -32,10 +31,10 @@ export function ModelPicker() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <label className="block">
-        <span className="label">Brand</span>
-        <select className="field mt-1" value={brand} onChange={(event) => onBrandChange(event.target.value)}>
+        <span className="label-dark mb-1.5">Brand</span>
+        <select className="field-dark" value={brand} onChange={(event) => onBrandChange(event.target.value)}>
           {brands.map((entry) => (
             <option key={entry} value={entry}>
               {entry}
@@ -44,8 +43,8 @@ export function ModelPicker() {
         </select>
       </label>
       <label className="block">
-        <span className="label">Model</span>
-        <select className="field mt-1" value={model} onChange={(event) => setModel(event.target.value)}>
+        <span className="label-dark mb-1.5">Model</span>
+        <select className="field-dark" value={model} onChange={(event) => setModel(event.target.value)}>
           {models.map((entry) => (
             <option key={entry.model} value={entry.model}>
               {entry.model}
@@ -54,8 +53,8 @@ export function ModelPicker() {
         </select>
       </label>
       <label className="block">
-        <span className="label">Manufacturing year (optional)</span>
-        <select className="field mt-1" value={year} onChange={(event) => setYear(event.target.value)}>
+        <span className="label-dark mb-1.5">Year · optional</span>
+        <select className="field-dark" value={year} onChange={(event) => setYear(event.target.value)}>
           <option value="">Not sure</option>
           {YEARS.map((entry) => (
             <option key={entry} value={entry}>
@@ -64,8 +63,7 @@ export function ModelPicker() {
           ))}
         </select>
       </label>
-      <button className="btn-primary w-full" type="submit">
-        <Search className="h-4 w-4" aria-hidden="true" />
+      <button className="btn-primary w-full py-3.5 text-[15px] font-extrabold" type="submit">
         Show known issues
       </button>
     </form>

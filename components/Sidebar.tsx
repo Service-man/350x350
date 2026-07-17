@@ -1,64 +1,73 @@
+"use client";
+
 import Link from "next/link";
-import {
-  Bike,
-  BookOpen,
-  Database,
-  Gauge,
-  Home,
-  LayoutDashboard,
-  Settings,
-  Stethoscope,
-  Wrench
-} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 // The logged-in "my garage" area. Public knowledge pages (library, models,
 // data sources) live under the Explore divider and never require login.
 const garageLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/garage", label: "Garage", icon: Bike },
-  { href: "/service-logs", label: "Service Logs", icon: Wrench },
-  { href: "/symptoms", label: "Symptoms", icon: Stethoscope },
-  { href: "/health", label: "Health", icon: Gauge },
-  { href: "/settings", label: "Settings", icon: Settings }
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/garage", label: "Garage" },
+  { href: "/service-logs", label: "Service logs" },
+  { href: "/symptoms", label: "Symptoms" },
+  { href: "/health", label: "Health" },
+  { href: "/settings", label: "Settings" }
 ];
 
 const exploreLinks = [
-  { href: "/library", label: "Bike Library", icon: BookOpen },
-  { href: "/models", label: "Models", icon: Gauge },
-  { href: "/data-sources", label: "Data Sources", icon: Database }
+  { href: "/library", label: "Bike library" },
+  { href: "/models", label: "Models" },
+  { href: "/data-sources", label: "Data sources" }
 ];
 
-function NavLink({ href, label, icon: Icon }: (typeof garageLinks)[number]) {
+export type BayInfo = { title: string; meta: string };
+
+function NavLink({ href, label, active }: { href: string; label: string; active: boolean }) {
   return (
     <Link
       href={href}
-      className="flex shrink-0 items-center gap-3 rounded px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+      className={cn(
+        "shrink-0 rounded-[7px] px-3 py-2.5 text-[13.5px] transition",
+        active ? "bg-leaf font-bold text-white" : "text-lav hover:bg-white/5 hover:text-white"
+      )}
     >
-      <Icon className="h-4 w-4" aria-hidden="true" />
       {label}
     </Link>
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ bay }: { bay?: BayInfo }) {
+  const pathname = usePathname();
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
   return (
-    <aside className="border-b border-stone-200 bg-ink text-white lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:border-b-0">
-      <div className="flex h-full flex-col">
-        <Link href="/" className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
-          <Home className="h-6 w-6 text-amberline" aria-hidden="true" />
-          <span className="text-lg font-semibold">350x Garage</span>
+    <aside className="bg-ink text-white lg:fixed lg:inset-y-0 lg:left-0 lg:w-56">
+      <div className="flex h-full flex-col px-4 py-5">
+        <Link href="/" className="mb-6 flex items-center gap-2.5 px-1.5 text-[14.5px] font-extrabold tracking-tight">
+          <span className="inline-block h-[18px] w-[18px] rounded-[4px] bg-leaf" aria-hidden="true" />
+          350x GARAGE
         </Link>
-        <nav className="flex gap-1 overflow-x-auto px-3 py-3 lg:flex-1 lg:flex-col lg:overflow-visible">
+        <nav className="flex gap-1 overflow-x-auto lg:flex-1 lg:flex-col lg:overflow-visible">
           {garageLinks.map((link) => (
-            <NavLink key={link.href} {...link} />
+            <NavLink key={link.href} {...link} active={isActive(link.href)} />
           ))}
-          <span className="hidden px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wide text-white/40 lg:block">
+          <span className="hidden px-3 pb-1.5 pt-5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-lavdim lg:block">
             Explore
           </span>
           {exploreLinks.map((link) => (
-            <NavLink key={link.href} {...link} />
+            <NavLink key={link.href} {...link} active={isActive(link.href)} />
           ))}
         </nav>
+        {bay ? (
+          <div className="mt-4 hidden rounded-lg border border-bayline bg-bay p-3 lg:block">
+            <p className="mb-1.5 font-mono text-[9.5px] font-semibold uppercase tracking-[0.18em] text-lavmute">
+              In the bay
+            </p>
+            <p className="text-[13px] font-bold">{bay.title}</p>
+            <p className="text-[11.5px] text-lavmute">{bay.meta}</p>
+          </div>
+        ) : null}
       </div>
     </aside>
   );

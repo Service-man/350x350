@@ -44,7 +44,8 @@ export default async function LibraryPage({
     <PublicShell>
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-6 max-w-3xl">
-          <h1 className="text-3xl font-semibold text-ink">Bike Library</h1>
+          <p className="eyebrow mb-3">Knowledge base</p>
+          <h1 className="text-4xl font-black tracking-[-0.03em] text-ink">Bike Library</h1>
           <p className="mt-2 text-sm leading-6 text-steel">
             Search the full knowledge base of known issues — curated research today, compliant community
             ingestion as sources come online. No account needed.

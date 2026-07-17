@@ -54,7 +54,7 @@ export default async function HealthPage({
           <div className="mb-5 rounded border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
             Risk scores are early indicators based on rider logs and service history, not OEM-certified diagnostics.
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="panel grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {scores.map((risk) => <RiskScoreCard key={risk.component} risk={risk} />)}
           </div>
         </>
