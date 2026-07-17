@@ -64,7 +64,8 @@ export default function DataSourcesPage() {
     <PublicShell>
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-8 max-w-3xl">
-          <h1 className="text-3xl font-semibold text-ink">Data Sources</h1>
+          <p className="eyebrow mb-3">Provenance &amp; compliance</p>
+          <h1 className="text-4xl font-black tracking-[-0.03em] text-ink">Data Sources</h1>
           <p className="mt-2 text-sm leading-6 text-steel">
             Every claim in the knowledge base carries its source type, a link where one exists, and a
             last-verified date. Ingestion uses official APIs and public feeds only — no login-walled or

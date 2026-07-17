@@ -63,36 +63,40 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   }
 
   return (
-    <form action={onSubmit} className="space-y-4 rounded border border-stone-200 bg-white p-6 shadow-soft">
-      {mode === "signup" ? (
+    <>
+      <form action={onSubmit} className="panel-dark space-y-4 p-7">
+        {mode === "signup" ? (
+          <label className="block">
+            <span className="label-dark mb-1.5">Full name</span>
+            <input className="field-dark" name="full_name" placeholder="Arjun Menon" />
+          </label>
+        ) : null}
         <label className="block">
-          <span className="label">Full name</span>
-          <input className="field mt-1" name="full_name" placeholder="Arjun Menon" />
+          <span className="label-dark mb-1.5">Email</span>
+          <input className="field-dark" name="email" type="email" required placeholder="you@example.com" />
         </label>
-      ) : null}
-      <label className="block">
-        <span className="label">Email</span>
-        <input className="field mt-1" name="email" type="email" required placeholder="you@example.com" />
-      </label>
-      <label className="block">
-        <span className="label">Password</span>
-        <input className="field mt-1" name="password" type="password" minLength={6} required />
-      </label>
-      {error ? <p className="rounded bg-red-50 p-3 text-sm text-danger">{error}</p> : null}
+        <label className="block">
+          <span className="label-dark mb-1.5">Password</span>
+          <input className="field-dark" name="password" type="password" minLength={6} required />
+        </label>
+        {error ? (
+          <p className="rounded border border-danger/40 bg-danger/15 p-3 text-sm text-red-300">{error}</p>
+        ) : null}
+        <button className="btn-primary w-full py-3.5 text-[15px] font-extrabold" disabled={loading} type="submit">
+          {loading ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
+        </button>
+        <p className="text-center text-[13px] text-lavmute">
+          {mode === "login" ? "New here?" : "Already have an account?"}{" "}
+          <Link className="font-bold text-lav hover:text-white" href={mode === "login" ? "/signup" : "/login"}>
+            {mode === "login" ? "Sign up" : "Log in"}
+          </Link>
+        </p>
+      </form>
       {isDemoMode() ? (
-        <p className="rounded bg-amber-50 p-3 text-sm text-amber-800">
-          Demo mode is active until real Supabase environment variables are added in Vercel.
+        <p className="mt-4 rounded border border-stone-300 bg-mint p-3 font-mono text-xs text-lavmute">
+          demo mode active — connect Supabase env vars to go live
         </p>
       ) : null}
-      <button className="btn-primary w-full" disabled={loading} type="submit">
-        {loading ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
-      </button>
-      <p className="text-center text-sm text-steel">
-        {mode === "login" ? "New to 350x Garage?" : "Already have an account?"}{" "}
-        <Link className="font-semibold text-leaf" href={mode === "login" ? "/signup" : "/login"}>
-          {mode === "login" ? "Sign up" : "Log in"}
-        </Link>
-      </p>
-    </form>
+    </>
   );
 }

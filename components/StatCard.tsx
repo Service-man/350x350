@@ -1,21 +1,37 @@
 import type { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type StatCardProps = {
   label: string;
   value: string | number;
   helper?: string;
-  icon: LucideIcon;
+  /** Accepted for compatibility; the redesign's stat cards are icon-free. */
+  icon?: LucideIcon;
+  /** "dark" renders the inverted ink card used for the highlight stat. */
+  variant?: "light" | "dark";
 };
 
-export function StatCard({ label, value, helper, icon: Icon }: StatCardProps) {
+export function StatCard({ label, value, helper, variant = "light" }: StatCardProps) {
+  const dark = variant === "dark";
   return (
-    <div className="rounded border border-stone-200 bg-white p-4 shadow-soft">
-      <div className="flex items-center justify-between gap-3">
-        <span className="label">{label}</span>
-        <Icon className="h-5 w-5 text-leaf" aria-hidden="true" />
-      </div>
-      <p className="mt-3 text-2xl font-semibold text-ink">{value}</p>
-      {helper ? <p className="mt-1 text-sm text-steel">{helper}</p> : null}
+    <div
+      className={cn(
+        "rounded-xl p-[18px]",
+        dark ? "bg-ink text-white" : "border border-stone-200 bg-white shadow-soft"
+      )}
+    >
+      <p
+        className={cn(
+          "mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.18em]",
+          dark ? "text-lavmute" : "text-leaf"
+        )}
+      >
+        {label}
+      </p>
+      <p className={cn("text-3xl font-black", dark ? "text-white" : "text-ink")}>{value}</p>
+      {helper ? (
+        <p className={cn("mt-0.5 text-xs", dark ? "text-lavmute" : "text-steel")}>{helper}</p>
+      ) : null}
     </div>
   );
 }

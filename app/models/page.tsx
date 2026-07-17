@@ -30,7 +30,8 @@ export default async function ModelsPage() {
     <PublicShell>
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-8 max-w-3xl">
-          <h1 className="text-3xl font-semibold text-ink">Model Library</h1>
+          <p className="eyebrow mb-3">Pick your machine</p>
+          <h1 className="text-4xl font-black tracking-[-0.03em] text-ink">Model Library</h1>
           <p className="mt-2 text-sm leading-6 text-steel">
             {MODEL_ROUTES.length} models across {CATALOG_BRANDS.length}{" "}
             brands in India&apos;s 300cc+ segment. Pick your motorcycle to see its known issues by service

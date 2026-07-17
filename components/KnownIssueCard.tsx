@@ -39,18 +39,18 @@ export function KnownIssueCard({ issue, showModel = false }: { issue: KnownIssue
       : null;
 
   return (
-    <article className="rounded border border-stone-200 bg-white p-5 shadow-soft">
+    <article className="rounded-xl border border-stone-200 bg-white p-5 shadow-soft">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           {showModel ? (
-            <p className="text-xs font-semibold uppercase tracking-wide text-leaf">
+            <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-leaf">
               {issue.brand} {issue.model}
             </p>
           ) : null}
-          <h3 className={cn("text-lg font-semibold text-ink", showModel && "mt-1")}>{issue.issue_title}</h3>
+          <h3 className={cn("text-lg font-extrabold tracking-tight text-ink", showModel && "mt-1")}>{issue.issue_title}</h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded bg-paper px-2 py-1 text-xs font-semibold text-road">{issue.component}</span>
+          <span className="rounded bg-paper px-2 py-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.12em] text-road">{issue.component}</span>
           <span
             className={cn(
               "inline-flex items-center gap-1 rounded border px-2 py-1 text-xs font-semibold",
