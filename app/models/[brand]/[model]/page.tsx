@@ -85,7 +85,7 @@ export default async function ModelIntelligencePage({ params, searchParams }: Pa
               indicators, not OEM-certified diagnostics.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-end gap-2">
             <form className="flex items-end gap-2">
               <label>
                 <span className="label">Your year</span>

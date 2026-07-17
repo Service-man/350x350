@@ -31,7 +31,7 @@ export function DeleteDataButton() {
       <div className="mt-3 flex flex-wrap gap-2">
         <form action={dispatch}>
           <button
-            className="inline-flex items-center justify-center gap-2 rounded bg-danger px-4 py-2 text-sm font-semibold text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded bg-danger px-5 text-sm font-bold text-white transition hover:bg-ink disabled:cursor-not-allowed disabled:opacity-60"
             disabled={pending}
             type="submit"
           >

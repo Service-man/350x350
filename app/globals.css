@@ -56,25 +56,36 @@ textarea {
     @apply block font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-lavmute;
   }
 
+  /* ── Uniform control sizing ─────────────────────────────────────────────
+     Every interactive control (input, select, button CTA) is exactly h-11
+     (44px) so mixed rows — a filter select next to Apply next to a primary
+     CTA — always sit flush. Never override a control's height or vertical
+     padding at the call site; width, margins, and horizontal padding only. */
+
   .field {
-    @apply w-full rounded border border-stone-300 bg-white px-3 py-2.5 text-sm text-ink outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/20;
+    @apply h-11 w-full rounded border border-stone-300 bg-white px-3 text-sm text-ink outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/20;
+  }
+
+  /* Textareas share .field styling but grow naturally. */
+  textarea.field {
+    @apply h-auto min-h-[88px] py-2.5;
   }
 
   /* Input variant for dark cards. */
   .field-dark {
-    @apply w-full rounded border border-bayline bg-bay px-3 py-3 text-sm text-white outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30;
+    @apply h-11 w-full rounded border border-bayline bg-bay px-3 text-sm text-white outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded bg-leaf px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#6D28D9] disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded bg-leaf px-5 text-sm font-bold text-white transition hover:bg-[#6D28D9] disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-dark {
-    @apply inline-flex items-center justify-center gap-2 rounded bg-ink px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#2A2438] disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded bg-ink px-5 text-sm font-bold text-white transition hover:bg-[#2A2438] disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded border-[1.5px] border-ink bg-transparent px-4 py-2.5 text-sm font-bold text-ink transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded border-[1.5px] border-ink bg-transparent px-5 text-sm font-bold text-ink transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .panel {
