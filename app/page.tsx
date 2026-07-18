@@ -102,10 +102,10 @@ export default function LandingPage() {
               batch, and RPM band. Free to browse.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link className="btn-dark px-6 py-3.5 text-[15px]" href="/models">
+              <Link className="btn-dark px-6" href="/models">
                 Decode my bike
               </Link>
-              <Link className="btn-secondary px-6 py-3.5 text-[15px]" href="/signup">
+              <Link className="btn-secondary px-6" href="/signup">
                 Track my bike
               </Link>
             </div>

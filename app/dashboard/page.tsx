@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       title="The bay"
       subtitle="Live snapshot — garage, logs, symptoms, model intel."
       action={
-        <Link className="btn-dark px-4 py-2.5 text-[13.5px]" href="/service-logs">
+        <Link className="btn-dark" href="/service-logs">
           + Log a service
         </Link>
       }

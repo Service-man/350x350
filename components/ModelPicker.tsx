@@ -63,7 +63,7 @@ export function ModelPicker() {
           ))}
         </select>
       </label>
-      <button className="btn-primary w-full py-3.5 text-[15px] font-extrabold" type="submit">
+      <button className="btn-primary w-full" type="submit">
         Show known issues
       </button>
     </form>

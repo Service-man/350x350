@@ -82,7 +82,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         {error ? (
           <p className="rounded border border-danger/40 bg-danger/15 p-3 text-sm text-red-300">{error}</p>
         ) : null}
-        <button className="btn-primary w-full py-3.5 text-[15px] font-extrabold" disabled={loading} type="submit">
+        <button className="btn-primary w-full" disabled={loading} type="submit">
           {loading ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
         </button>
         <p className="text-center text-[13px] text-lavmute">

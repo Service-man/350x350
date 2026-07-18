@@ -30,7 +30,7 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
               My garage
             </Link>
             <Link
-              className="rounded-md bg-leaf px-4 py-2 font-bold text-white transition hover:bg-[#6D28D9]"
+              className="inline-flex h-10 items-center rounded-md bg-leaf px-4 font-bold text-white transition hover:bg-[#6D28D9]"
               href="/signup"
             >
               Track my bike
