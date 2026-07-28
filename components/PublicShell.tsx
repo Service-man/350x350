@@ -3,7 +3,8 @@ import Link from "next/link";
 const navLinks = [
   { href: "/library", label: "Library" },
   { href: "/models", label: "Models" },
-  { href: "/data-sources", label: "Data" }
+  { href: "/diy", label: "DIY" },
+  { href: "/blog", label: "Blog" }
 ];
 
 // Chrome for the logged-out, inform-first experience. Deliberately cookie-free

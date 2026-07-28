@@ -126,3 +126,62 @@ export type ActionState = {
   error?: string;
   ts?: number;
 };
+
+// ── Editorial content (admin-authored) ──────────────────────────────────────
+export type PublishStatus = "draft" | "published";
+
+// A blog post. body_html is sanitized WYSIWYG output; rendered as-is.
+export type BlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  body_html: string;
+  cover_emoji: string | null;
+  tags: string[];
+  author_name: string | null;
+  status: PublishStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DiyDifficulty = "easy" | "medium" | "advanced";
+
+// One ordered step in a DIY guide.
+export type DiyStep = { title: string; detail: string };
+
+// An affiliate product link attached to a DIY guide. amazon_url is entered and
+// controlled entirely from the admin panel (the site never scrapes Amazon).
+export type DiyProduct = {
+  id: string;
+  guide_id: string;
+  title: string;
+  description: string | null;
+  amazon_url: string;
+  approx_price: string | null;
+  position: number;
+  created_at: string;
+  updated_at: string;
+};
+
+// A curated DIY fix. Optionally tagged to a brand/model/component so it can be
+// surfaced next to the relevant known issues, but kept in its own collection so
+// affiliate links never enter the neutral knowledge base.
+export type DiyGuide = {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string | null;
+  brand: string | null;
+  model: string | null;
+  component: string | null;
+  difficulty: DiyDifficulty;
+  estimated_time: string | null;
+  steps: DiyStep[];
+  status: PublishStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  products: DiyProduct[];
+};

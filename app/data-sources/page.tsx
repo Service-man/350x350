@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { BrainCircuit, Cable, CheckCircle2, FileText, MessageSquare, MoonStar, Rss, ShieldX, Stethoscope, Youtube } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { PublicShell } from "@/components/PublicShell";
 import { SOURCE_ADAPTERS } from "@/lib/ingestion/pipeline";
 import { isLlmConfigured } from "@/lib/ingestion/llm/anthropic";
 import { cn } from "@/lib/utils";
+
+// Temporarily hidden from the site (nav links removed too). Flip to false to
+// restore the page — everything below is untouched.
+const DATA_SOURCES_HIDDEN = true;
 
 export const metadata: Metadata = {
   title: "Data Sources — 350x Garage",
@@ -59,6 +64,7 @@ const staticSources = [
 ];
 
 export default function DataSourcesPage() {
+  if (DATA_SOURCES_HIDDEN) redirect("/");
   const llmConfigured = isLlmConfigured();
   return (
     <PublicShell>

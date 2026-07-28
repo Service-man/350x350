@@ -18,7 +18,8 @@ const garageLinks = [
 const exploreLinks = [
   { href: "/library", label: "Bike library" },
   { href: "/models", label: "Models" },
-  { href: "/data-sources", label: "Data sources" }
+  { href: "/diy", label: "DIY & Fixes" },
+  { href: "/blog", label: "Blog" }
 ];
 
 export type BayInfo = { title: string; meta: string };

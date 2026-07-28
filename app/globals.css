@@ -105,4 +105,67 @@ textarea {
       rgba(124, 58, 237, 0.06) 180px 184px
     );
   }
+
+  /* Long-form article typography — shared by the public blog article view and
+     the WYSIWYG editor's content area so what you write matches what ships. */
+  .article {
+    @apply text-[16.5px] leading-[1.75] text-road;
+  }
+  .article h2 {
+    @apply mb-3 mt-8 text-[22px] font-black tracking-[-0.02em] text-ink;
+  }
+  .article h3 {
+    @apply mb-2 mt-6 text-[18px] font-extrabold text-ink;
+  }
+  .article p {
+    @apply my-4;
+  }
+  .article ul {
+    @apply my-4 list-disc space-y-1.5 pl-6;
+  }
+  .article ol {
+    @apply my-4 list-decimal space-y-1.5 pl-6;
+  }
+  .article a {
+    @apply font-semibold text-leaf underline decoration-leaf/40 underline-offset-2 hover:decoration-leaf;
+  }
+  .article blockquote {
+    @apply my-5 border-l-[3px] border-leaf bg-paper py-2 pl-4 pr-2 text-steel;
+  }
+  .article strong {
+    @apply font-bold text-ink;
+  }
+  .article em {
+    @apply italic;
+  }
+  .article code {
+    @apply rounded bg-paper px-1.5 py-0.5 font-mono text-[0.85em] text-ink;
+  }
+
+  /* Editor chrome: the content area reuses .article; this wraps it. */
+  .rte-shell {
+    @apply rounded-lg border border-stone-300 bg-white;
+  }
+  .rte-toolbar {
+    @apply flex flex-wrap items-center gap-1 border-b border-stone-200 p-2;
+  }
+  .rte-btn {
+    @apply inline-flex h-8 min-w-8 items-center justify-center rounded border border-stone-200 bg-white px-2 text-[13px] font-bold text-road transition hover:border-leaf hover:text-leaf;
+  }
+  .rte-btn-active {
+    @apply border-leaf bg-mint text-leaf;
+  }
+  .rte-content {
+    @apply min-h-[320px] px-5 py-4 outline-none;
+  }
+  .ProseMirror {
+    @apply outline-none;
+  }
+  .ProseMirror:focus {
+    @apply outline-none;
+  }
+  .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    @apply pointer-events-none float-left h-0 text-steel;
+  }
 }
