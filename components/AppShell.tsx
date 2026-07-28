@@ -1,6 +1,7 @@
 import { Sidebar, type BayInfo } from "@/components/Sidebar";
+import { getAdmin } from "@/lib/admin/auth";
 
-export function AppShell({
+export async function AppShell({
   children,
   title,
   subtitle,
@@ -13,9 +14,10 @@ export function AppShell({
   action?: React.ReactNode;
   bay?: BayInfo;
 }) {
+  const isAdmin = Boolean(await getAdmin());
   return (
     <div className="min-h-screen bg-paper">
-      <Sidebar bay={bay} />
+      <Sidebar bay={bay} isAdmin={isAdmin} />
       <main className="lg:pl-56">
         <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-9">
           <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3">

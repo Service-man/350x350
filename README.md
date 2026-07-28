@@ -19,8 +19,11 @@ indicators from curated research and public ownership reports, **not OEM-certifi
 | Model library (all models) | `/models` | Public |
 | Model intelligence (timeline / batch / RPM) | `/models/[brand]/[model]?year=` | Public |
 | Bike Library (search + filters) | `/library` (old `/problem-radar` redirects here) | Public |
+| DIY & Fixes (guides + affiliate parts) | `/diy`, `/diy/[slug]` | Public |
+| Blog | `/blog`, `/blog/[slug]` | Public |
 | Data sources & compliance | `/data-sources` | Public |
 | Dashboard, Garage, Service Logs, Symptoms, Health, Settings | `/dashboard` … | Opt-in (login) |
+| Admin console (blog + DIY + affiliate links) | `/admin` … | Admin (email allowlist) |
 
 ## Tech stack
 
@@ -60,6 +63,9 @@ RSS_FEED_URLS=https://example.com/feed.xml,...     # comma-separated public feed
 # Optional — AI validation/enrichment stays dormant without this:
 ANTHROPIC_API_KEY=...                              # enables the Claude validate + propose-fix pass
 ANTHROPIC_MODEL=claude-opus-4-8                    # optional override (defaults to claude-opus-4-8)
+
+# Optional — the /admin console: a logged-in user whose email is listed here gets admin:
+ADMIN_EMAILS=you@example.com,editor@example.com    # comma-separated allowlist
 ```
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY`, the ingestion keys, or `ANTHROPIC_API_KEY` to the client.
@@ -77,6 +83,8 @@ Create a project, then run the SQL files from `supabase/migrations` in the SQL e
 7. `007_seed_bike_catalog.sql` — the 300cc+ India model catalogue seed (idempotent upsert)
 8. `008_harden_function_search_path.sql` — pins the trigger function's search_path (security-linter fix)
 9. `009_add_possible_solution.sql` — adds the `possible_solution` column the AI enrichment pass fills
+10. `010_blog.sql` — `blog_posts` table (public read when published; admin-written)
+11. `011_diy.sql` — `diy_guides` + `diy_products` tables (curated DIY fixes + Amazon affiliate links)
 
 The catalogue (`lib/catalog/bikeCatalog.ts`) and the known-issue seed (`lib/knowledge/seedKnownIssues.ts`)
 are the single sources of truth; run `npm run seed:sql` to regenerate `005` and `007` after editing them.
@@ -98,6 +106,25 @@ storage policies restrict access to the owner's folder.
 `npm run seed:sql` to regenerate `005_seed_known_issues.sql`. Never edit the generated SQL by hand.
 The same TS seed renders directly in demo mode, and `/api/ingest?source=seed` re-syncs it into the DB
 without re-running migrations.
+
+## Editorial: blog, DIY & the admin console
+
+Two admin-authored surfaces sit alongside the knowledge base, both managed from `/admin`:
+
+- **Blog** (`/blog`) — long-form posts written in a WYSIWYG editor (Tiptap). Body HTML is sanitized
+  (DOMPurify, tag-allowlisted) on save, then rendered in the site's article style.
+- **DIY & Fixes** (`/diy`) — curated do-it-yourself guides (steps + difficulty + time) with **Amazon
+  affiliate product links**. Product links are entered and edited entirely from the admin panel (the app
+  never scrapes Amazon), rendered with `rel="sponsored nofollow noopener"` and a clear Amazon Associates
+  disclosure. Affiliate content lives in its own tables (`diy_guides` / `diy_products`), deliberately
+  separate from the neutral `known_issues` knowledge base.
+
+**Admin access** is an **email allowlist**: a logged-in user whose email is in `ADMIN_EMAILS`
+(comma-separated) reaches `/admin`; everyone else is redirected. Writes go through the service-role
+client, so they require the Supabase env vars — in demo mode the console is viewable but read-only.
+Blog posts and DIY guides both have `draft`/`published` states; only published items appear publicly.
+A fresh database (or demo mode) shows a curated seed (incl. the E20-vs-petrol post) until real content
+is published.
 
 ## Ingestion (off by default)
 
