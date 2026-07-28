@@ -19,8 +19,7 @@ const exploreLinks = [
   { href: "/library", label: "Bike library" },
   { href: "/models", label: "Models" },
   { href: "/diy", label: "DIY & Fixes" },
-  { href: "/blog", label: "Blog" },
-  { href: "/data-sources", label: "Data sources" }
+  { href: "/blog", label: "Blog" }
 ];
 
 export type BayInfo = { title: string; meta: string };
@@ -39,7 +38,7 @@ function NavLink({ href, label, active }: { href: string; label: string; active:
   );
 }
 
-export function Sidebar({ bay, isAdmin = false }: { bay?: BayInfo; isAdmin?: boolean }) {
+export function Sidebar({ bay }: { bay?: BayInfo }) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
@@ -60,14 +59,6 @@ export function Sidebar({ bay, isAdmin = false }: { bay?: BayInfo; isAdmin?: boo
           {exploreLinks.map((link) => (
             <NavLink key={link.href} {...link} active={isActive(link.href)} />
           ))}
-          {isAdmin ? (
-            <>
-              <span className="hidden px-3 pb-1.5 pt-5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-lavdim lg:block">
-                Internal
-              </span>
-              <NavLink href="/admin" label="Admin console" active={isActive("/admin")} />
-            </>
-          ) : null}
         </nav>
         {bay ? (
           <div className="mt-4 hidden rounded-lg border border-bayline bg-bay p-3 lg:block">

@@ -3,7 +3,7 @@ import { getUser } from "@/lib/supabase/server";
 import { isDemoSupabaseConfig } from "@/lib/supabase/config";
 
 // Admin access is an email allowlist: a logged-in user whose email is in the
-// ADMIN_EMAILS env var (comma-separated) may reach /admin. No schema change,
+// ADMIN_EMAILS env var (comma-separated) may reach the unlinked /admin_con console. No schema change,
 // managed entirely from environment settings.
 
 export function adminEmails(): string[] {
@@ -29,7 +29,7 @@ export async function getAdmin() {
 
 export async function requireAdmin() {
   const user = await getUser();
-  if (!user) redirect("/login?next=/admin");
+  if (!user) redirect("/login?next=/admin_con");
   if (!isDemoSupabaseConfig() && !isAdminEmail(user.email)) redirect("/");
   return user;
 }

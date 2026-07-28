@@ -149,7 +149,7 @@ export function DiyGuideForm({ guide }: { guide?: DiyGuide }) {
         <button className="btn-secondary" name="status" value="draft" type="submit" disabled={pending}>
           Save as draft
         </button>
-        <Link className="text-[13px] font-bold text-steel hover:text-ink" href="/admin/diy">Cancel</Link>
+        <Link className="text-[13px] font-bold text-steel hover:text-ink" href="/admin_con/diy">Cancel</Link>
       </div>
     </form>
   );

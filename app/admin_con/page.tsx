@@ -15,9 +15,9 @@ export default async function AdminHome() {
   const productCount = guides.reduce((sum, guide) => sum + guide.products.length, 0);
 
   const tiles = [
-    { label: "Blog posts", value: posts.length, helper: `${publishedPosts} published`, href: "/admin/blog", cta: "Manage blog" },
-    { label: "DIY guides", value: guides.length, helper: `${publishedGuides} published`, href: "/admin/diy", cta: "Manage DIY" },
-    { label: "Affiliate links", value: productCount, helper: "across all guides", href: "/admin/diy", cta: "Review links" }
+    { label: "Blog posts", value: posts.length, helper: `${publishedPosts} published`, href: "/admin_con/blog", cta: "Manage blog" },
+    { label: "DIY guides", value: guides.length, helper: `${publishedGuides} published`, href: "/admin_con/diy", cta: "Manage DIY" },
+    { label: "Affiliate links", value: productCount, helper: "across all guides", href: "/admin_con/diy", cta: "Review links" }
   ];
 
   return (
@@ -39,8 +39,8 @@ export default async function AdminHome() {
       </div>
 
       <div className="mt-6 grid gap-3.5 md:grid-cols-2">
-        <Link href="/admin/blog/new" className="btn-dark">+ New blog post</Link>
-        <Link href="/admin/diy/new" className="btn-secondary">+ New DIY guide</Link>
+        <Link href="/admin_con/blog/new" className="btn-dark">+ New blog post</Link>
+        <Link href="/admin_con/diy/new" className="btn-secondary">+ New DIY guide</Link>
       </div>
     </AdminShell>
   );

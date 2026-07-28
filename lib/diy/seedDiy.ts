@@ -3,7 +3,7 @@ import type { DiyGuide } from "@/lib/types";
 // Starter DIY guides: source of truth for demo mode and the fallback a fresh
 // production database shows until an admin curates real ones. Product links use
 // neutral Amazon India search URLs as placeholders — an admin replaces each with
-// the exact affiliate product link (with the Associates tag) from /admin.
+// the exact affiliate product link (with the Associates tag) from /admin_con.
 
 const SEED_AT = "2026-07-10T00:00:00.000Z";
 

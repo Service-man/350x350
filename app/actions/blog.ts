@@ -56,10 +56,10 @@ export async function savePostAction(_prev: ActionState, formData: FormData): Pr
     : await client.from("blog_posts").insert(payload);
   if (result.error) return fail(result.error.message);
 
-  revalidatePath("/admin/blog");
+  revalidatePath("/admin_con/blog");
   revalidatePath("/blog");
   revalidatePath(`/blog/${slug}`);
-  redirect("/admin/blog");
+  redirect("/admin_con/blog");
 }
 
 export async function deletePostAction(formData: FormData): Promise<void> {
@@ -70,7 +70,7 @@ export async function deletePostAction(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "").trim();
   if (!id) return;
   await client.from("blog_posts").delete().eq("id", id);
-  revalidatePath("/admin/blog");
+  revalidatePath("/admin_con/blog");
   revalidatePath("/blog");
-  redirect("/admin/blog");
+  redirect("/admin_con/blog");
 }

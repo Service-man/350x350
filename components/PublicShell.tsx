@@ -4,8 +4,7 @@ const navLinks = [
   { href: "/library", label: "Library" },
   { href: "/models", label: "Models" },
   { href: "/diy", label: "DIY" },
-  { href: "/blog", label: "Blog" },
-  { href: "/data-sources", label: "Data" }
+  { href: "/blog", label: "Blog" }
 ];
 
 // Chrome for the logged-out, inform-first experience. Deliberately cookie-free

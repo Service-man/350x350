@@ -21,9 +21,9 @@ indicators from curated research and public ownership reports, **not OEM-certifi
 | Bike Library (search + filters) | `/library` (old `/problem-radar` redirects here) | Public |
 | DIY & Fixes (guides + affiliate parts) | `/diy`, `/diy/[slug]` | Public |
 | Blog | `/blog`, `/blog/[slug]` | Public |
-| Data sources & compliance | `/data-sources` | Public |
+| Data sources & compliance | `/data-sources` — **temporarily hidden** (redirects to `/`; flip `DATA_SOURCES_HIDDEN` in `app/data-sources/page.tsx` to restore) | — |
 | Dashboard, Garage, Service Logs, Symptoms, Health, Settings | `/dashboard` … | Opt-in (login) |
-| Admin console (blog + DIY + affiliate links) | `/admin` … | Admin (email allowlist) |
+| Admin console (blog + DIY + affiliate links) | `/admin_con` … — **unlinked**; reachable only by typing the URL | Admin (email allowlist) |
 
 ## Tech stack
 
@@ -109,7 +109,8 @@ without re-running migrations.
 
 ## Editorial: blog, DIY & the admin console
 
-Two admin-authored surfaces sit alongside the knowledge base, both managed from `/admin`:
+Two admin-authored surfaces sit alongside the knowledge base, both managed from `/admin_con`
+(deliberately unlinked from all navigation — reach it by typing the URL):
 
 - **Blog** (`/blog`) — long-form posts written in a WYSIWYG editor (Tiptap). Body HTML is sanitized
   (DOMPurify, tag-allowlisted) on save, then rendered in the site's article style.

@@ -62,7 +62,7 @@ export function BlogPostForm({ post }: { post?: BlogPost }) {
         <button className="btn-secondary" name="status" value="draft" type="submit" disabled={pending}>
           Save as draft
         </button>
-        <Link className="text-[13px] font-bold text-steel hover:text-ink" href="/admin/blog">
+        <Link className="text-[13px] font-bold text-steel hover:text-ink" href="/admin_con/blog">
           Cancel
         </Link>
       </div>

@@ -100,10 +100,10 @@ export async function saveGuideAction(_prev: ActionState, formData: FormData): P
     if (error) return fail(error.message);
   }
 
-  revalidatePath("/admin/diy");
+  revalidatePath("/admin_con/diy");
   revalidatePath("/diy");
   revalidatePath(`/diy/${slug}`);
-  redirect("/admin/diy");
+  redirect("/admin_con/diy");
 }
 
 export async function deleteGuideAction(formData: FormData): Promise<void> {
@@ -114,7 +114,7 @@ export async function deleteGuideAction(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "").trim();
   if (!id) return;
   await client.from("diy_guides").delete().eq("id", id); // products cascade
-  revalidatePath("/admin/diy");
+  revalidatePath("/admin_con/diy");
   revalidatePath("/diy");
-  redirect("/admin/diy");
+  redirect("/admin_con/diy");
 }

@@ -4,7 +4,7 @@ import { seedDiyGuides } from "@/lib/diy/seedDiy";
 import type { BlogPost, DiyGuide, DiyProduct } from "@/lib/types";
 
 // Admin-side reads use the service role so drafts are visible too. In demo mode
-// (no service key) they return the curated seed, so /admin is fully explorable.
+// (no service key) they return the curated seed, so /admin_con is fully explorable.
 
 export async function adminListPosts(): Promise<BlogPost[]> {
   const admin = createAdminClient();

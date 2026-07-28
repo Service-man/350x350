@@ -13,14 +13,14 @@ export default async function AdminDiyList() {
     <AdminShell
       title="DIY guides"
       subtitle="Curated fixes with Amazon affiliate product links, shown at /diy."
-      action={<Link className="btn-dark" href="/admin/diy/new">+ New guide</Link>}
+      action={<Link className="btn-dark" href="/admin_con/diy/new">+ New guide</Link>}
     >
       {guides.length === 0 ? (
         <p className="panel text-sm text-steel">No guides yet. Create your first one.</p>
       ) : (
         <div className="panel divide-y divide-stone-200 p-0">
           {guides.map((guide) => (
-            <Link key={guide.id} href={`/admin/diy/${guide.id}`} className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-paper">
+            <Link key={guide.id} href={`/admin_con/diy/${guide.id}`} className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-paper">
               <div className="min-w-0">
                 <p className="truncate font-bold text-ink">{guide.title}</p>
                 <p className="mt-0.5 font-mono text-[11.5px] uppercase text-lavmute">

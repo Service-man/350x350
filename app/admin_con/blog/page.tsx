@@ -13,14 +13,14 @@ export default async function AdminBlogList() {
     <AdminShell
       title="Blog posts"
       subtitle="Create and edit editorial content shown at /blog."
-      action={<Link className="btn-dark" href="/admin/blog/new">+ New post</Link>}
+      action={<Link className="btn-dark" href="/admin_con/blog/new">+ New post</Link>}
     >
       {posts.length === 0 ? (
         <p className="panel text-sm text-steel">No posts yet. Create your first one.</p>
       ) : (
         <div className="panel divide-y divide-stone-200 p-0">
           {posts.map((post) => (
-            <Link key={post.id} href={`/admin/blog/${post.id}`} className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-paper">
+            <Link key={post.id} href={`/admin_con/blog/${post.id}`} className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-paper">
               <div className="min-w-0">
                 <p className="truncate font-bold text-ink">
                   {post.cover_emoji ? <span className="mr-2">{post.cover_emoji}</span> : null}
