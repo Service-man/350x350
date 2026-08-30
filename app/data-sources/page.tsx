@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
 const DATA_SOURCES_HIDDEN = true;
 
 export const metadata: Metadata = {
-  title: "Data Sources — 350x Garage",
-  description: "How the 350x Garage knowledge base is sourced: curated research, official APIs, and public feeds — with provenance on every claim."
+  title: "Data Sources — BikeKundli",
+  description: "How the BikeKundli knowledge base is sourced: curated research, official APIs, and public feeds — with provenance on every claim."
 };
 
 // Env-driven status must reflect the running deployment, not build time.

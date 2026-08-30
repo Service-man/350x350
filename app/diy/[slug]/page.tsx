@@ -12,8 +12,8 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const guide = await getGuideBySlug(slug);
-  if (!guide) return { title: "DIY & Fixes — 350x Garage" };
-  return { title: `${guide.title} — 350x Garage`, description: guide.summary ?? undefined };
+  if (!guide) return { title: "DIY & Fixes — BikeKundli" };
+  return { title: `${guide.title} — BikeKundli`, description: guide.summary ?? undefined };
 }
 
 const difficultyStyle: Record<string, string> = {

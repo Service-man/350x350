@@ -10,9 +10,9 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post) return { title: "Blog — 350x Garage" };
+  if (!post) return { title: "Blog — BikeKundli" };
   return {
-    title: `${post.title} — 350x Garage`,
+    title: `${post.title} — BikeKundli`,
     description: post.excerpt ?? undefined
   };
 }
@@ -49,7 +49,7 @@ export default async function BlogArticle({ params }: { params: Promise<{ slug: 
             <h1 className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-ink sm:text-4xl">{post.title}</h1>
           </div>
           <p className="mt-4 font-mono text-[11.5px] uppercase text-lavmute">
-            {post.author_name ?? "350x Garage"} · {formatDate(post.published_at)}
+            {post.author_name ?? "BikeKundli"} · {formatDate(post.published_at)}
           </p>
         </header>
 

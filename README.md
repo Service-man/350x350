@@ -1,6 +1,6 @@
-# 350x Garage
+# BikeKundli
 
-350x Garage is a rider-intelligence platform for 350cc+ motorcycles in India, built **inform-first**:
+BikeKundli is a rider-intelligence platform for 300cc+ motorcycles in India, built **inform-first**:
 anyone can browse what typically goes wrong with their exact motorcycle — organized by **service
 checkpoint (mileage)**, **manufacturing batch**, and **RPM band** — with symptoms to watch, preventive
 actions, and rough repair-cost bands. No account needed to browse.
@@ -121,7 +121,7 @@ Two admin-authored surfaces sit alongside the knowledge base, both managed from 
   separate from the neutral `known_issues` knowledge base.
 
 **Admin access** is an **email allowlist**: a logged-in user whose email is in `ADMIN_EMAILS`
-(comma-separated) reaches `/admin`; everyone else is redirected. Writes go through the service-role
+(comma-separated) reaches `/admin_con`; everyone else is redirected. Writes go through the service-role
 client, so they require the Supabase env vars — in demo mode the console is viewable but read-only.
 Blog posts and DIY guides both have `draft`/`published` states; only published items appear publicly.
 A fresh database (or demo mode) shows a curated seed (incl. the E20-vs-petrol post) until real content

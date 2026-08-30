@@ -4,7 +4,7 @@ import { PublicShell } from "@/components/PublicShell";
 import { getPublishedPosts } from "@/lib/blog/getBlog";
 
 export const metadata: Metadata = {
-  title: "Blog — 350x Garage",
+  title: "Blog — BikeKundli",
   description: "Level-headed reads on owning a 300cc+ motorcycle in India — fuel, service, and real-world reliability."
 };
 

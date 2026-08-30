@@ -6,7 +6,7 @@ import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { getPublishedGuides } from "@/lib/diy/getDiy";
 
 export const metadata: Metadata = {
-  title: "DIY & Fixes — 350x Garage",
+  title: "DIY & Fixes — BikeKundli",
   description: "Simple, curated do-it-yourself fixes for common 300cc+ motorcycle issues, with the exact parts and tools you need."
 };
 

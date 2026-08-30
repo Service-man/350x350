@@ -9,8 +9,8 @@ import { getKnownIssues } from "@/lib/knowledge/getKnownIssues";
 import { titleCase } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Bike Library — 350x Garage",
-  description: "Search known issues for 350cc+ motorcycles in India by model, component, severity, and mileage band."
+  title: "Bike Library — BikeKundli",
+  description: "Search known issues for 300cc+ motorcycles in India by model, component, severity, and mileage band."
 };
 
 export default async function LibraryPage({

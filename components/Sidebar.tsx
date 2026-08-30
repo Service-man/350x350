@@ -47,7 +47,7 @@ export function Sidebar({ bay }: { bay?: BayInfo }) {
       <div className="flex h-full flex-col px-4 py-5">
         <Link href="/" className="mb-6 flex items-center gap-2.5 px-1.5 text-[14.5px] font-extrabold tracking-tight">
           <span className="inline-block h-[18px] w-[18px] rounded-[4px] bg-leaf" aria-hidden="true" />
-          350x GARAGE
+          BikeKundli
         </Link>
         <nav className="flex gap-1 overflow-x-auto lg:flex-1 lg:flex-col lg:overflow-visible">
           {garageLinks.map((link) => (

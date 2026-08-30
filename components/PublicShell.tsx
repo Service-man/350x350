@@ -17,7 +17,7 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-9 gap-y-3 px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2.5 text-[17px] font-extrabold tracking-tight">
             <span className="inline-block h-[22px] w-[22px] rounded-[5px] bg-leaf" aria-hidden="true" />
-            350x GARAGE
+            BikeKundli
           </Link>
           <nav className="flex flex-wrap items-center gap-6 text-[13.5px]">
             {navLinks.map((link) => (
