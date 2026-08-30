@@ -91,7 +91,7 @@ export default function LandingPage() {
         <div className="pinstripes pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto grid max-w-7xl gap-14 px-4 py-14 sm:px-6 lg:grid-cols-[1.25fr_0.85fr] lg:px-8 lg:py-16">
           <div>
-            <p className="eyebrow mb-5">Intel for 350cc+ machines</p>
+            <p className="eyebrow mb-5">Intel for 300cc+ machines</p>
             <h1 className="text-balance text-5xl font-black leading-[0.98] tracking-[-0.035em] text-ink sm:text-6xl lg:text-7xl">
               Know your machine
               <br />
@@ -121,7 +121,7 @@ export default function LandingPage() {
             />
             <div className="relative">
               <h2 className="text-[19px] font-extrabold tracking-tight">What goes wrong with mine?</h2>
-              <p className="mb-5 mt-1 text-[13px] text-lav">Pick your motorcycle. See its known-issue map.</p>
+              <p className="mb-5 mt-1 text-[13px] text-lav">Pick your motorcycle. Read its kundli — the issues written in its future.</p>
               <ModelPicker />
               <div className="mt-4 flex flex-wrap gap-2">
                 {popular.map((route) => (

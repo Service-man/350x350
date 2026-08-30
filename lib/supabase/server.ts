@@ -44,7 +44,7 @@ export async function getUser() {
     if (cookieStore.get(DEMO_SESSION_COOKIE)?.value === "1") {
       return {
         id: "00000000-0000-4000-8000-000000000350",
-        email: "demo@350xgarage.in"
+        email: "demo@bikekundli.com"
       };
     }
     return null;

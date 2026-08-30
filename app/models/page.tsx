@@ -7,7 +7,7 @@ import { MODEL_ROUTES } from "@/lib/knowledge/slugs";
 import { CATALOG_BRANDS } from "@/lib/catalog/bikeCatalog";
 
 export const metadata: Metadata = {
-  title: "Model Library — 350x Garage",
+  title: "Model Library — BikeKundli",
   description: "Known issues, service checkpoints, and repair-cost bands for 300cc+ motorcycles in India across every major brand."
 };
 

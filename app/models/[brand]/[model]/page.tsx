@@ -17,9 +17,9 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { brand, model } = await params;
   const route = findModelBySlugs(brand, model);
-  if (!route) return { title: "Model not found — 350x Garage" };
+  if (!route) return { title: "Model not found — BikeKundli" };
   return {
-    title: `${route.brand} ${route.model} known issues & service checkpoints — 350x Garage`,
+    title: `${route.brand} ${route.model} known issues & service checkpoints — BikeKundli`,
     description: `What goes wrong with the ${route.brand} ${route.model} in India: issues by mileage checkpoint, manufacturing batch, and RPM band, with preventive actions and cost bands.`
   };
 }

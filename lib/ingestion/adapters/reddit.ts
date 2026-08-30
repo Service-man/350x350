@@ -1,6 +1,6 @@
 import type { IngestQuery, RawMention, SourceAdapter } from "../types";
 
-const USER_AGENT = "web:350x-garage:v0.2 (compliant ownership-issue research)";
+const USER_AGENT = "web:bikekundli:v0.2 (compliant ownership-issue research)";
 
 async function getAccessToken(clientId: string, clientSecret: string) {
   const response = await fetch("https://www.reddit.com/api/v1/access_token", {

@@ -40,7 +40,7 @@ export const SEED_DIY_GUIDES: DiyGuide[] = [
     slug: "battery-health-and-accessory-wiring-check",
     title: "Battery health & accessory wiring check",
     summary:
-      "Weak starts after accessories are one of the most-reported issues on 350cc bikes. A multimeter and 15 minutes tells you whether it's the battery or the wiring.",
+      "Weak starts after accessories are one of the most-reported issues on 300cc+ bikes. A multimeter and 15 minutes tells you whether it's the battery or the wiring.",
     brand: null,
     model: null,
     component: "Battery",

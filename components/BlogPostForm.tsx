@@ -34,7 +34,7 @@ export function BlogPostForm({ post }: { post?: BlogPost }) {
         </label>
         <label className="block">
           <span className="label mb-1.5">Author</span>
-          <input className="field" name="author_name" defaultValue={post?.author_name ?? "350x Garage"} />
+          <input className="field" name="author_name" defaultValue={post?.author_name ?? "BikeKundli"} />
         </label>
       </div>
 

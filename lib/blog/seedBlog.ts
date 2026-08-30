@@ -26,10 +26,10 @@ export const SEED_BLOG_POSTS: BlogPost[] = [
     slug: "e20-petrol-vs-traditional-what-350cc-riders-should-know",
     title: "E20 petrol vs traditional petrol: what 300cc+ riders should actually know",
     excerpt:
-      "E20 is now the default at most Indian pumps. Here is a level-headed look at what 20% ethanol means for a modern 350cc+ motorcycle — mileage, materials, and what to watch — without the panic.",
+      "E20 is now the default at most Indian pumps. Here is a level-headed look at what 20% ethanol means for a modern 300cc+ motorcycle — mileage, materials, and what to watch — without the panic.",
     cover_emoji: "⛽",
     tags: ["Fuel", "E20", "Maintenance", "India"],
-    author_name: "350x Garage",
+    author_name: "BikeKundli",
     published_at: "2026-07-14T00:00:00.000Z",
     body_html: `
 <p>If you have filled up recently, you have almost certainly run E20 — petrol blended with up to 20% ethanol. India hit its E20 rollout target ahead of schedule, and the standard pump nozzle now dispenses it by default. For the overwhelming majority of bikes in the 300cc+ segment, which run on petrol, this is the fuel you are living with. Here is what it actually changes, and what is just noise.</p>
@@ -61,7 +61,7 @@ export const SEED_BLOG_POSTS: BlogPost[] = [
       "Walk into the service centre knowing what a proper first-interval service includes — so you can tell a thorough job from a quick oil-and-out.",
     cover_emoji: "🔧",
     tags: ["Service", "Checkpoints", "Maintenance"],
-    author_name: "350x Garage",
+    author_name: "BikeKundli",
     published_at: "2026-07-07T00:00:00.000Z",
     body_html: `
 <p>The early-interval service sets the tone for a bike's life, and it is the one most riders hand over without knowing what "done" looks like. Here is the short version of what a thorough 5,000 km service on a 300cc+ bike should touch.</p>

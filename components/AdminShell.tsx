@@ -33,7 +33,7 @@ export function AdminSidebar() {
       <div className="flex h-full flex-col px-4 py-5">
         <Link href="/admin_con" className="mb-1 flex items-center gap-2.5 px-1.5 text-[14.5px] font-extrabold tracking-tight">
           <span className="inline-block h-[18px] w-[18px] rounded-[4px] bg-leaf" aria-hidden="true" />
-          350x GARAGE
+          BikeKundli
         </Link>
         <span className="mb-6 px-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-lavdim">
           Admin console
