@@ -102,11 +102,11 @@ export default function LandingPage() {
               batch, and RPM band. Free to browse.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link className="btn-dark px-6" href="/models">
-                Decode my bike
+              <Link className="btn-dark px-6" href="/kundli">
+                Ask the kundli
               </Link>
-              <Link className="btn-secondary px-6" href="/signup">
-                Track my bike
+              <Link className="btn-secondary px-6" href="/models">
+                Decode my bike
               </Link>
             </div>
             <div className="mt-9 hidden sm:block">

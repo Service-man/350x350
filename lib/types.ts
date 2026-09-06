@@ -4,6 +4,25 @@ export type GarageType = "authorized" | "independent" | "self";
 export type Severity = "low" | "medium" | "high" | "critical";
 export type Frequency = "once" | "intermittent" | "frequent" | "constant";
 
+// ── Riding pattern ───────────────────────────────────────────────────────────
+// Lives on the bike: it describes how this rider uses this machine, which is
+// what the kundli uses to weight which parts wear first. usage_type (the most
+// common route) is the bike's existing column; the rest sit in riding_profile.
+export type CruisingSpeed = "40-60" | "60-80" | "80-100" | "100+";
+export type RideFrequency = "daily" | "weekdays" | "weekends" | "occasional";
+export type PillionFrequency = "rarely" | "sometimes" | "often";
+
+export type RidingProfile = {
+  cruising_speed?: CruisingSpeed | null;
+  daily_distance_km?: number | null;
+  ride_frequency?: RideFrequency | null;
+  daily_ride_minutes?: number | null;
+  pillion?: PillionFrequency | null;
+  notes?: string | null;
+};
+
+export type ServiceNumber = "1" | "2" | "3" | "4" | "5" | "post5";
+
 export type Bike = {
   id: string;
   user_id: string;
@@ -18,6 +37,7 @@ export type Bike = {
   has_modifications: boolean;
   modification_notes: string | null;
   fuel_type: string;
+  riding_profile: RidingProfile;
   created_at: string;
   updated_at: string;
 };
@@ -37,6 +57,7 @@ export type ServiceLog = {
   labor_cost: number | null;
   notes: string | null;
   bill_file_url: string | null;
+  service_number: ServiceNumber | null;
   created_at: string;
   updated_at: string;
 };
@@ -54,8 +75,70 @@ export type SymptomLog = {
   frequency: Frequency | null;
   resolved: boolean;
   linked_service_log_id: string | null;
+  predicted_issue: string | null;
   created_at: string;
   updated_at: string;
+};
+
+// ── Kundli chat ──────────────────────────────────────────────────────────────
+// A service-log draft: what was read off an uploaded bill (or typed in chat),
+// used to pre-fill the manual form. Every field is optional by nature.
+export type ServiceLogDraft = {
+  bike_id?: string | null;
+  brand?: string | null;
+  model?: string | null;
+  year?: number | null;
+  service_date?: string | null;
+  odometer_km?: number | null;
+  service_type?: ServiceType | null;
+  garage_type?: GarageType | null;
+  garage_name?: string | null;
+  city?: string | null;
+  total_cost?: number | null;
+  labor_cost?: number | null;
+  parts_replaced?: string | null;
+  service_number?: ServiceNumber | null;
+  notes?: string | null;
+};
+
+// Which field an assistant turn asked for, so a chip/typed answer can be
+// applied to the right place on the next turn.
+export type KundliAskField =
+  | "cruising_speed"
+  | "ride_frequency"
+  | "daily_distance_km"
+  | "daily_ride_minutes"
+  | "pillion"
+  | "service_number"
+  | "odometer_km"
+  | "service_date"
+  | "parts_reason";
+
+export type KundliMeta = {
+  draft?: ServiceLogDraft | null;
+  ask?: KundliAskField | null;
+  chips?: string[];
+  provider?: "openai" | "anthropic" | "rules";
+};
+
+export type KundliChat = {
+  id: string;
+  user_id: string;
+  bike_id: string | null;
+  title: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type KundliMessage = {
+  id: string;
+  chat_id: string;
+  user_id: string;
+  role: "user" | "assistant";
+  content: string;
+  attachment_name: string | null;
+  meta: KundliMeta | null;
+  created_at: string;
 };
 
 export type BikeBodyType =
@@ -121,9 +204,11 @@ export type KnownIssue = {
 };
 
 // Shared result shape for server actions consumed via useActionState.
+// `message` carries a success detail worth showing (e.g. the deduced problem).
 export type ActionState = {
   ok: boolean;
   error?: string;
+  message?: string;
   ts?: number;
 };
 

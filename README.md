@@ -66,6 +66,11 @@ ANTHROPIC_MODEL=claude-opus-4-8                    # optional override (defaults
 
 # Optional — the /admin console: a logged-in user whose email is listed here gets admin:
 ADMIN_EMAILS=you@example.com,editor@example.com    # comma-separated allowlist
+
+# Optional — the kundli chat's AI. Resolution order: OpenAI → Anthropic → built-in rules engine.
+OPENAI_API_KEY=sk-...                              # enables AI replies + reading bill photos (vision)
+OPENAI_MODEL=gpt-4o-mini                           # optional override
+# (ANTHROPIC_API_KEY above is used if no OpenAI key is set.)
 ```
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY`, the ingestion keys, or `ANTHROPIC_API_KEY` to the client.
@@ -85,6 +90,7 @@ Create a project, then run the SQL files from `supabase/migrations` in the SQL e
 9. `009_add_possible_solution.sql` — adds the `possible_solution` column the AI enrichment pass fills
 10. `010_blog.sql` — `blog_posts` table (public read when published; admin-written)
 11. `011_diy.sql` — `diy_guides` + `diy_products` tables (curated DIY fixes + Amazon affiliate links)
+12. `012_kundli.sql` — `bikes.riding_profile`, `service_logs.service_number`, `symptom_logs.predicted_issue`, and the `kundli_chats` / `kundli_messages` tables
 
 The catalogue (`lib/catalog/bikeCatalog.ts`) and the known-issue seed (`lib/knowledge/seedKnownIssues.ts`)
 are the single sources of truth; run `npm run seed:sql` to regenerate `005` and `007` after editing them.
@@ -106,6 +112,33 @@ storage policies restrict access to the owner's folder.
 `npm run seed:sql` to regenerate `005_seed_known_issues.sql`. Never edit the generated SQL by hand.
 The same TS seed renders directly in demo mode, and `/api/ingest?source=seed` re-syncs it into the DB
 without re-running migrations.
+
+## The kundli chat (main surface)
+
+`/kundli` is the app's primary feature: a chat that reads a bike's past and predicts its next failures —
+"an astrologer for your bike". It lives in the garage area (it needs the rider's bikes and logs) and
+is the first item in the sidebar, the first public nav link, and the landing page's primary CTA.
+
+- **Bill in, draft out** — attach a service bill (JPG/PNG/WebP/PDF, ≤ 4 MB). PDFs are read as text
+  (`unpdf`); images are read by the AI provider's vision. What was found becomes a *service-log
+  draft* with a **Save as service log →** card that pre-fills the manual form (`/service-logs?draft=`).
+- **One question at a time** — the chat asks the riding-pattern questions the feedback called for
+  (cruising speed, ride frequency, daily km, saddle minutes, pillion) and, when parts were replaced,
+  *why*. Answers are quick-reply chips and are saved to `bikes.riding_profile`.
+- **The reading** — blends the rule-based risk scorer, the model's known issues near the current km,
+  and the riding pattern into 3–5 parts likely to need attention, each with a why and a km window.
+- **Provider layer** (`lib/kundli/llm.ts`): `OPENAI_API_KEY` → `ANTHROPIC_API_KEY` → the deterministic
+  rules engine (`lib/kundli/reading.ts`). The rules engine is always the fallback, so the chat works
+  in demo mode and if an AI call fails. AI replies carry a machine trailer (`ASK:` / `CHIPS:`) so
+  chip answers are applied to the right field in either mode.
+- **History** — `kundli_chats` / `kundli_messages` (migration `012`, owner-scoped RLS). Demo mode keeps
+  the transcript in the browser only.
+
+Related changes from the same feedback round: the service-log page is **upload-first** (the manual
+form appears only after a bill is read or the rider chooses "enter manually"), the form gained
+**which service (1st–5th / post-5th)** plus the riding-pattern fields, the dashboard empty state
+offers **Add a bike / Log a service side by side**, and symptoms are **note-first** — a free-text
+note from which the component, severity, and *likely upcoming problem* are deduced.
 
 ## Editorial: blog, DIY & the admin console
 

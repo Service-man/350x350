@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       title="The bay"
       subtitle="Live snapshot — garage, logs, symptoms, model intel."
       action={
-        <Link className="btn-dark" href="/service-logs">
+        <Link className="btn-dark" href="/service-logs?new=1">
           + Log a service
         </Link>
       }
@@ -83,10 +83,12 @@ export default async function DashboardPage() {
     >
       {typedBikes.length === 0 ? (
         <EmptyState
-          title="Add your first bike to start tracking health and service history."
-          description="Once a bike is added, your service costs, open symptoms, and component risk summary will show up here."
+          title="Start with your bike, or with your last service bill."
+          description="Add a bike to track it, or log a service and we'll pre-fill what we can. Either way, your kundli starts reading from here."
           actionHref="/garage"
-          actionLabel="Add bike"
+          actionLabel="Add a bike"
+          secondaryHref="/service-logs?new=1"
+          secondaryLabel="Log a service"
         />
       ) : (
         <div className="space-y-5">
