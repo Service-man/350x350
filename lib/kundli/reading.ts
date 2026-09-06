@@ -185,6 +185,8 @@ const COMPONENT_TERMS: Record<string, string[]> = {
   Gearbox: ["gear", "gearbox", "false neutral", "shift"]
 };
 
+const MAINTENANCE_ONLY = /\b(?:clean(?:ed|ing)?|lube[sd]?|lubricat\w*|adjust\w*|tension\w*|wash\w*|polish\w*|greas\w*|top[- ]?up|check\w*|inspect\w*)\b/i;
+
 function componentFor(text: string): string | null {
   const t = text.toLowerCase();
   for (const [component, terms] of Object.entries(COMPONENT_TERMS)) {
@@ -258,6 +260,9 @@ export function predict(ctx: KundliContext): Prediction[] {
   const latest = bikeLogs[0];
   if (latest?.parts_replaced) {
     for (const part of latest.parts_replaced.split(/,|;/)) {
+      // A cleaned, lubed, adjusted or checked part is not a new part — only a
+      // real replacement resets that component's clock.
+      if (MAINTENANCE_ONLY.test(part)) continue;
       const component = componentFor(part);
       if (component) bump(component, -25, `${part.trim()} was replaced on ${latest.service_date}`);
     }

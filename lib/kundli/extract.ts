@@ -77,13 +77,20 @@ function normaliseImageMime(mime: string, name: string) {
 
 // ── Rules-based parsing (no AI needed) ───────────────────────────────────────
 
+// Parts that, when they appear on a bill, were replaced. Consumable services
+// (wash, polish, grease, chain lube) are deliberately absent: they are on
+// every bill and are not replacements.
 const PART_TERMS = [
   "engine oil", "oil filter", "air filter", "spark plug", "brake pad", "brake pads", "brake shoe", "brake fluid",
-  "chain", "sprocket", "chain sprocket kit", "clutch plate", "clutch cable", "clutch", "coolant", "battery",
+  "sprocket", "clutch plate", "clutch cable", "clutch", "coolant", "battery",
   "bulb", "headlight", "tail lamp", "indicator", "relay", "fuse", "tyre", "tire", "tube", "wheel bearing",
-  "fork oil", "fork seal", "shock absorber", "disc", "rotor", "gasket", "o-ring", "throttle cable", "speedo cable",
-  "grease", "chain lube", "wash", "polish"
+  "fork oil", "fork seal", "shock absorber", "disc", "rotor", "gasket", "o-ring", "throttle cable", "speedo cable"
 ];
+
+// "Chain" only counts as replaced when the bill says so. "Chain clean & lube"
+// or a slack adjustment is maintenance, and must not read as a new chain —
+// the kundli would otherwise reset a genuine chain risk.
+const CHAIN_REPLACED = /\b(?:chain\s*(?:&|and|\/)?\s*sprocket(?:\s*kit)?|chain\s*kit|new\s+chain|chain\s+replace(?:d|ment)?|replace(?:d|ment)?\s+chain)\b/i;
 
 const MONTHS: Record<string, string> = {
   jan: "01", feb: "02", mar: "03", apr: "04", may: "05", jun: "06",
@@ -146,7 +153,8 @@ export function parseBillText(text: string): ServiceLogDraft {
   draft.labor_cost = findNumberAfter(t, /(?:labou?r|service\s+charge|workmanship)\D{0,25}?(?:₹|rs\.?|inr)?\s*(\d[\d,]*(?:\.\d{1,2})?)/i);
 
   const parts = PART_TERMS.filter((term) => lower.includes(term));
-  // Collapse "brake pad"/"brake pads" style duplicates and generic "chain" when the kit matched.
+  if (CHAIN_REPLACED.test(t)) parts.push("chain & sprocket");
+  // Collapse "brake pad"/"brake pads" style duplicates.
   const deduped = parts.filter((p) => !parts.some((q) => q !== p && q.includes(p)));
   draft.parts_replaced = deduped.length ? deduped.map(titleWord).join(", ") : null;
 

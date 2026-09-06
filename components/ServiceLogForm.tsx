@@ -106,7 +106,7 @@ export function ServiceLogForm({ userId, bikes, initial, initialFile, onSaved }:
           </select>
         </label>
         <label>
-          <span className="label">Which service is this?</span>
+          <span className="label">Service no.</span>
           <select className="field mt-1" name="service_number" defaultValue={initial?.service_number ?? ""}>
             <option value="">Not sure</option>
             {SERVICE_NUMBERS.map(([value, label]) => (
