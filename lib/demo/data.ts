@@ -24,6 +24,7 @@ export const demoBikes: Bike[] = [
     has_modifications: true,
     modification_notes: "Aux lights and phone charger",
     fuel_type: "petrol",
+    riding_profile: { cruising_speed: "60-80", ride_frequency: "daily", daily_distance_km: 24, daily_ride_minutes: 60, pillion: "sometimes" },
     created_at: now,
     updated_at: now
   },
@@ -41,6 +42,7 @@ export const demoBikes: Bike[] = [
     has_modifications: false,
     modification_notes: null,
     fuel_type: "petrol",
+    riding_profile: {},
     created_at: now,
     updated_at: now
   }
@@ -62,6 +64,7 @@ export const demoServiceLogs: ServiceLog[] = [
     labor_cost: 900,
     notes: "Checked accessory wiring after weak start complaint.",
     bill_file_url: null,
+    service_number: "3",
     created_at: now,
     updated_at: now
   },
@@ -80,6 +83,7 @@ export const demoServiceLogs: ServiceLog[] = [
     labor_cost: 750,
     notes: "Periodic service with chain slack adjustment.",
     bill_file_url: null,
+    service_number: "2",
     created_at: now,
     updated_at: now
   }
@@ -99,6 +103,7 @@ export const demoSymptoms: SymptomLog[] = [
     frequency: "intermittent",
     resolved: false,
     linked_service_log_id: demoServiceLogs[0].id,
+    predicted_issue: "Weak cranking after accessory drain",
     created_at: now,
     updated_at: now
   },
@@ -115,6 +120,7 @@ export const demoSymptoms: SymptomLog[] = [
     frequency: "frequent",
     resolved: false,
     linked_service_log_id: null,
+    predicted_issue: null,
     created_at: now,
     updated_at: now
   }

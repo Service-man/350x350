@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 // The logged-in "my garage" area. Public knowledge pages (library, models,
 // data sources) live under the Explore divider and never require login.
 const garageLinks = [
+  { href: "/kundli", label: "Kundli chat" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/garage", label: "Garage" },
   { href: "/service-logs", label: "Service logs" },

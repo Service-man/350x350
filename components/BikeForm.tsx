@@ -3,9 +3,8 @@
 import { useActionState, useEffect, useRef } from "react";
 import { Save } from "lucide-react";
 import { saveBikeAction } from "@/app/actions/bikes";
-import { USAGE_TYPES } from "@/lib/constants/bikes";
+import { USAGE_TYPES, USAGE_TYPE_LABELS } from "@/lib/constants/bikes";
 import type { ActionState, Bike } from "@/lib/types";
-import { titleCase } from "@/lib/utils";
 
 const initialState: ActionState = { ok: false };
 
@@ -52,11 +51,11 @@ export function BikeForm({ bike }: { bike?: Bike }) {
           <input className="field mt-1" name="city" defaultValue={bike?.city ?? ""} placeholder="Bengaluru" />
         </label>
         <label>
-          <span className="label">Usage type</span>
+          <span className="label">Most common route</span>
           <select className="field mt-1" name="usage_type" defaultValue={bike?.usage_type ?? "mixed"}>
             {USAGE_TYPES.map((type) => (
               <option key={type} value={type}>
-                {titleCase(type)}
+                {USAGE_TYPE_LABELS[type]}
               </option>
             ))}
           </select>

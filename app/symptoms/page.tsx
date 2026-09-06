@@ -42,7 +42,7 @@ export default async function SymptomsPage({
   });
 
   return (
-    <AppShell title="Symptom Logger" subtitle="Capture rider-observed symptoms with component, severity, frequency, and resolution state.">
+    <AppShell title="Symptoms" subtitle="Tell us what you noticed. We work out the part, the severity, and what it usually leads to on your model.">
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <SymptomForm bikes={typedBikes} serviceLogs={serviceLogs} />
         <section className="space-y-4">
@@ -99,6 +99,12 @@ export default async function SymptomsPage({
                       </span>
                     </div>
                     {symptom.symptom_description ? <p className="mt-3 text-sm leading-6 text-steel">{symptom.symptom_description}</p> : null}
+                    {symptom.predicted_issue ? (
+                      <p className="mt-3 rounded-lg border border-leaf/30 bg-mint/60 px-3 py-2 text-[13px] text-ink">
+                        <span className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-leaf">Likely ahead · </span>
+                        {symptom.predicted_issue}
+                      </p>
+                    ) : null}
                   </article>
                 );
               })}
